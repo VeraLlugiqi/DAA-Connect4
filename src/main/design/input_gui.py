@@ -1,7 +1,8 @@
 import subprocess
 import tkinter as tk
-from tkinter import ttk
+import customtkinter
 from tkinter import simpledialog
+from tkinter import ttk
 
 class ConnectFourSetup:
     def __init__(self):
@@ -10,42 +11,39 @@ class ConnectFourSetup:
 
         self.window = tk.Tk()
         self.window.title("Connect Four Setup")
-        self.window.geometry("500x400")
+        self.window.geometry("900x700")
+        self.window.configure(bg="white")
 
         header_frame = tk.Frame(self.window, bg="red")
         header_frame.pack(fill=tk.X)
 
-        tk.Label(header_frame, text="PLAY CONNECT 4", font=("Helvetica", 16), bg="red").pack(pady=10)
+        tk.Label(header_frame, text="PLAY CONNECT 4",  font=("Helvetica", 45, "bold"), bg="red", fg="yellow" ).pack(pady=50)
 
+        padding_label = tk.Label(self.window, text="", bg="white")
+        padding_label.pack(pady=15)
 
-        tk.Label(self.window, text="Write your name:").pack(pady=5)
-        self.name_entry = tk.Entry(self.window)
-        self.name_entry.pack(pady=5)
+        tk.Label(self.window, text="Write your name:", bg="white",font=("Helvetica", 15)).pack(pady=10)
+        self.name_entry = customtkinter.CTkEntry(self.window, placeholder_text="Your Name")
+        self.name_entry.pack(pady=5) 
 
-        tk.Label(self.window, text="Pick the board size:").pack(pady=5)
-        self.grid_size_var = tk.StringVar()
-        size_options = ["5x4", "6x5", "8x7", "9x7", "10x7", "8x8"]
-        size_dropdown = ttk.Combobox(self.window, textvariable=self.grid_size_var, values=size_options)
+        tk.Label(self.window, text="Choose Table Size (rows x columns)",bg="white",font=("Helvetica", 15)).pack(pady=10)
+        self.grid_size_var = customtkinter.StringVar()
+        size_options = ["6x7", "5x4", "6x5", "8x7", "9x7", "10x7", "8x8"]
+        size_dropdown = customtkinter.CTkComboBox(self.window, variable=self.grid_size_var, values=size_options)
         size_dropdown.set("6x7")  # Default value
         size_dropdown.pack(pady=5)
 
-        tk.Label(self.window, text="Game Mode:").pack(pady=5)
-        mode_var = tk.StringVar()
-        mode_var.set("User vs User")
-        mode_dropdown = ttk.Combobox(self.window, textvariable=mode_var, values=["User vs User", "User vs Comp"])
-        mode_dropdown.pack(pady=5)
+        tk.Label(self.window, text="Game Mode:",bg="white",font=("Helvetica", 15)).pack(pady=5)
+        self.grid_size_var = customtkinter.StringVar()
+        size_options = ["User vs User", "User vs Comp"]
+        size_dropdown = customtkinter.CTkComboBox(self.window, variable=self.grid_size_var, values=size_options)
+        size_dropdown.set("User vs Comp")  # Default value
+        size_dropdown.pack(pady=5)
 
-        # Placeholder images, replace them with your actual images
-        photo1 = tk.PhotoImage(width=50, height=50)
-        photo2 = tk.PhotoImage(width=50, height=50)
+        
+        button = customtkinter.CTkButton(master=self.window, corner_radius=10,text="Start", fg_color=("red", "lightgray"), command=self.submit_callback)
+        button.pack(pady=20)
 
-        # Display placeholder images
-        tk.Label(self.window, image=photo1).pack(side=tk.LEFT, padx=10)
-        tk.Label(self.window, image=photo2).pack(side=tk.RIGHT, padx=10)
-
-        # tk.Label(self.window, text="vs").pack(pady=5)
-
-        tk.Button(self.window, text="Start", command=self.submit_callback,bg="red").pack(pady=20)
 
     def get_player_name(self):
         return self.name_entry.get()
