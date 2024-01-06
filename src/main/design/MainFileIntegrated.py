@@ -5,7 +5,7 @@ from datetime import datetime
 ROW_COUNT = 6
 COLUMN_COUNT = 7
 SQUARE_SIZE = 80
-RADIUS = int(SQUARE_SIZE / 3)
+RADIUS = int(SQUARE_SIZE / 2)
 
 class ConnectFourGUI:
     def __init__(self, master):
@@ -38,7 +38,7 @@ class ConnectFourGUI:
         self.close_button = tk.Button(button_frame, text='❌', command=self.close_window, font=('Helvetica', 12), width=button_width, bg='yellow', fg='black')
         self.close_button.pack(side='right', padx=20)
 
-        self.canvas = tk.Canvas(master, width=COLUMN_COUNT * SQUARE_SIZE, height=(ROW_COUNT + 1) * SQUARE_SIZE, bg='white')
+        self.canvas = tk.Canvas(master, width=COLUMN_COUNT * SQUARE_SIZE, height=(ROW_COUNT + 2) * SQUARE_SIZE, bg='white')
         self.canvas.grid(row=2, column=0, columnspan=2)
 
         self.board = np.zeros((ROW_COUNT, COLUMN_COUNT))
@@ -50,12 +50,12 @@ class ConnectFourGUI:
     def draw_board(self):
         for c in range(COLUMN_COUNT):
             for r in range(ROW_COUNT):
-                self.canvas.create_rectangle(c * SQUARE_SIZE, r * SQUARE_SIZE, (c + 1) * SQUARE_SIZE, (r + 1) * SQUARE_SIZE, fill='blue')
-                self.canvas.create_oval(c * SQUARE_SIZE, r * SQUARE_SIZE, (c + 1) * SQUARE_SIZE, (r + 1) * SQUARE_SIZE, fill='pink')
+                self.canvas.create_rectangle(c * SQUARE_SIZE, (r + 1)* SQUARE_SIZE, (c + 1) * SQUARE_SIZE, (r + 2) * SQUARE_SIZE, fill='blue')
+                self.canvas.create_oval(c * SQUARE_SIZE, (r + 1) * SQUARE_SIZE, (c + 1) * SQUARE_SIZE, (r + 2) * SQUARE_SIZE, fill='pink')
 
         # Adjusted starting position for the ball
         x = (COLUMN_COUNT // 2) * SQUARE_SIZE
-        y = SQUARE_SIZE - RADIUS
+        y = SQUARE_SIZE * 0.5 
         self.ball_id = self.canvas.create_oval(x - RADIUS, y - RADIUS, x + RADIUS, y + RADIUS, fill='red')
 
         self.canvas.update()
@@ -65,7 +65,7 @@ class ConnectFourGUI:
 
     def on_mouse_motion(self, event):
         x = event.x
-        y = SQUARE_SIZE - RADIUS
+        y = SQUARE_SIZE * 0.5 
         self.canvas.coords(self.ball_id, x - RADIUS, y - RADIUS, x + RADIUS, y + RADIUS)
 
     def refresh(self):
