@@ -1,6 +1,5 @@
 import tkinter as tk
 
-
 # Krijo një dritare
 dritare_emri = tk.Tk()
 dritare_emri.title("")
@@ -26,8 +25,8 @@ gjeresia_ekrani = dritare_emri.winfo_screenwidth()
 lartesia_ekrani = dritare_emri.winfo_screenheight()
 
 # Merr dimensionet e dritares
-gjeresia_dritare = 400
-lartesia_dritare = 265
+gjeresia_dritare = 406
+lartesia_dritare = 264
 
 # Llogarit pozicionin për të vendosur dritaren në qendër të ekranit
 pozicion_x = gjeresia_ekrani // 2 - gjeresia_dritare // 2
