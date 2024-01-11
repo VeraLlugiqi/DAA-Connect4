@@ -43,14 +43,17 @@ window.attributes('-toolwindow', True)
 window.attributes('-topmost', 1)
 
 # Set the window size
-window_width = 300
-window_height = 150
+window_width = 406
+window_height = 264
+
+# Get screen dimensions
 screen_width = window.winfo_screenwidth()
 screen_height = window.winfo_screenheight()
-x_position = (screen_width - window_width) // 2
-y_position = (screen_height - window_height) // 2
 
-window.geometry(f"{window_width}x{window_height}+{x_position}+{y_position}")
+# Set the window position to center
+left_position = (screen_width - window_width) // 2
+top_position = (screen_height - window_height) // 2
+window.geometry(f"{window_width}x{window_height}+{left_position}+{top_position}")
 
 # Create a frame to hold the buttons
 frame = tk.Frame(window)
