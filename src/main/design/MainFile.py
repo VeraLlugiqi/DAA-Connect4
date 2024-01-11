@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
+from tkinter import ttk
+import time
 from datetime import datetime
 
 #for table 
@@ -26,8 +28,9 @@ class ConnectFourGUI:
 
 		tk.Label(button_frame, text='', bg='white').pack(side='left', padx=50)
 
-		self.timer_label = tk.Label(button_frame, text='00:00', font=('Helvetica', 14), bg='lightgray')
-		self.timer_label.pack(side='left', padx=20)
+		self.time_var = tk.StringVar(value='04 : 00')
+		self.time_lbl = tk.Label(font=('Arial', 14), textvariable=self.time_var, bg='lightgray')
+		self.time_lbl.grid(row=1, column=0, padx=20)
 
 		tk.Label(button_frame, text='', bg='white').pack(side='left', padx=50)
 
@@ -38,10 +41,29 @@ class ConnectFourGUI:
 		self.close_button = tk.Button(button_frame, text='❌', command=self.close_window, font=('Helvetica', 12), width=button_width, bg='yellow', fg='black')
 		self.close_button.pack(side='right', padx=20)
 
-		self.update_timer()
+		self.count_down()
 
-	def update_timer(self):
-		self.master.after(1000, self.update_timer) 
+	def count_down(self):
+		total_in_seconds = 4 * 60
+
+		while total_in_seconds >= 0:
+			minutes, seconds = divmod(total_in_seconds, 60)
+			time_str = f'{minutes:02d} : {seconds:02d}'
+			self.time_var.set(time_str)
+			self.master.update()
+			time.sleep(1)
+			total_in_seconds -= 1
+
+		self.time_var.set("00 : 00")
+		self.open_result_window()
+
+	def open_result_window(self):
+		result_window = tk.Toplevel(self.master)
+		result_window.title("Result Window")
+
+		label = tk.Label(result_window, text="Timer reached 00:00", font=('Arial', 16))
+		label.pack(padx=20, pady=20)
+
 
 	def refresh(self):
 		pass
