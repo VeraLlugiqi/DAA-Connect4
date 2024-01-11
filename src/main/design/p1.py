@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter import messagebox
 
 # Krijo një dritare
 dritare = tk.Tk()
@@ -24,7 +23,7 @@ gjeresia_ekrani = dritare.winfo_screenwidth()
 lartesia_ekrani = dritare.winfo_screenheight()
 
 # Merr dimensionet e dritares
-gjeresia_dritare = 400
+gjeresia_dritare = 406
 lartesia_dritare = 264
 
 # Llogarit pozicionin për të vendosur dritaren në qendër të ekranit
