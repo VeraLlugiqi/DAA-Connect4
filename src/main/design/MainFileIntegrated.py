@@ -1,5 +1,6 @@
 import tkinter as tk
 import numpy as np
+import time
 from datetime import datetime
 
 ROW_COUNT = 6
@@ -26,8 +27,9 @@ class ConnectFourGUI:
 
         tk.Label(button_frame, text='', bg='white').pack(side='left', padx=50)
 
-        self.timer_label = tk.Label(button_frame, text='00:00', font=('Helvetica', 14), bg='lightgray')
-        self.timer_label.pack(side='left', padx=20)
+        self.time_var = tk.StringVar(value='04 : 00')
+        self.time_lbl = tk.Label(font=('Arial', 14), textvariable=self.time_var, bg='lightgray')
+        self.time_lbl.grid(row=1, column=0, padx=20)
 
         tk.Label(button_frame, text='', bg='white').pack(side='left', padx=50)
 
@@ -44,6 +46,8 @@ class ConnectFourGUI:
         self.board = np.zeros((ROW_COUNT, COLUMN_COUNT))
         self.ball_id = None  # To store the ID of the drawn ball
 
+
+        self.count_down()
         self.draw_board()
         self.bind_events()
 
@@ -73,6 +77,27 @@ class ConnectFourGUI:
 
     def close_window(self):
         self.master.destroy()
+
+    def count_down(self):
+        total_in_seconds = 4 * 60
+
+        while total_in_seconds >= 0:
+            minutes, seconds = divmod(total_in_seconds, 60)
+            time_str = f'{minutes:02d} : {seconds:02d}'
+            self.time_var.set(time_str)
+            self.master.update()
+            time.sleep(1)
+            total_in_seconds -= 1
+
+        self.time_var.set("00 : 00")
+        self.open_result_window()
+
+    def open_result_window(self):
+        result_window = tk.Toplevel(self.master)
+        result_window.title("Result Window")
+
+        label = tk.Label(result_window, text="Timer reached 00:00", font=('Arial', 16))
+        label.pack(padx=20, pady=20)
 
 if __name__ == "__main__":
     root = tk.Tk()
