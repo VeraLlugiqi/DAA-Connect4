@@ -106,9 +106,7 @@ class ConnectFourSetup:
         # Create an instance of ConnectFourGUI
         root = tk.Tk()
         game_instance = ConnectFourGUI(root, player_name1, player_name2, row_count, column_count)
-        root.protocol("WM_DELETE_WINDOW", self.on_game_window_close)  # Bind a callback for window close event
         root.mainloop()
-        self.window.destroy()
 
 
 if __name__ == "__main__":
