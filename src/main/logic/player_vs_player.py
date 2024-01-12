@@ -2,21 +2,15 @@ import tkinter as tk
 import numpy as np
 import sys
 
-ROW_COUNT = 6
-COLUMN_COUNT = 7
-SQUARE_SIZE = 80
-RADIUS = int(SQUARE_SIZE / 2)
-
-
 class ConnectFourGUI(tk.Frame):
     def __init__(self, master, player1_name, player2_name, row_count, column_count):
         super().__init__(master)
         self.master.title("Connect Four")
-
+        self.master.resizable(width=False, height=False)
         self.player1_name = player1_name
         self.player2_name = player2_name
 
-        self.current_player = 1  # Player 1 starts
+        self.current_player = 1  
         self.game_over = False
 
         connect_four_frame = tk.Frame(master, bg='red')
@@ -28,8 +22,11 @@ class ConnectFourGUI(tk.Frame):
         self.button_frame = tk.Frame(master, bg='white')
         self.button_frame.grid(row=1, column=0, columnspan=2, pady=20, sticky='ew')
 
-        self.name_label = tk.Label(self.button_frame, text=f'{player1_name}', font=('Helvetica', 14), bg='yellow', fg='black')
-        self.name_label.pack(side='left', padx=20)
+        self.name_frame = tk.Frame(self.button_frame, bg='white')
+        self.name_frame.pack(side='left', padx=20)
+
+        self.name_label = tk.Label(self.name_frame, text='', font=('Helvetica', 14), bg='yellow', fg='black', width=5)
+        self.name_label.pack()
 
         tk.Label(self.button_frame, text='', bg='white').pack(side='left', padx=50)
 
@@ -45,29 +42,62 @@ class ConnectFourGUI(tk.Frame):
         self.close_button = tk.Button(self.button_frame, text='❌', command=self.close_window, font=('Helvetica', 12), width=button_width, bg='yellow', fg='black')
         self.close_button.pack(side='right', padx=20)
 
-        self.canvas = tk.Canvas(master, width=column_count * SQUARE_SIZE, height=(row_count + 1) * SQUARE_SIZE, bg='white')
+        self.canvas = tk.Canvas(master, bg='white')
         self.canvas.grid(row=2, column=0, columnspan=2)
 
-        self.board = np.zeros((row_count, column_count))
-        self.ball_id = None  # To store the ID of the drawn ball
+        self.row_count = row_count
+        self.column_count = column_count
+        self.square_size = 0  #marrim square size dinamikisht nga metoda calulcate_square_size
+        self.radius = 0  
+
+        self.calculate_square_size()
+        self.board = np.zeros((self.row_count, self.column_count))
+        self.ball_id = None  
 
         self.draw_board()
         self.bind_events()
+        self.update_name_label()
+
+    def calculate_square_size(self):
+        max_width = self.master.winfo_screenwidth()
+        max_height = self.master.winfo_screenheight()
+
+        square_size_width = max_width // self.column_count
+        square_size_height = max_height // (self.row_count + 1)  
+
+        # i percaktojna dimensionet sa me u kon ni square nqs tabela ma e vogel / madhe
+        max_square_size_small = 70
+        max_square_size_large = 45
+
+        if self.row_count * self.column_count <= 42:  # percaktojme madhesine e tabeles madhe/vogel
+            self.square_size = min(square_size_width, square_size_height, max_square_size_small)
+        else:
+            self.square_size = min(square_size_width, square_size_height, max_square_size_large)
+
+        self.radius = int(self.square_size / 2)
+
+        canvas_width = self.column_count * self.square_size
+        canvas_height = (self.row_count + 1) * self.square_size  
+        self.canvas.config(width=canvas_width, height=canvas_height)
 
     def draw_board(self):
-        for c in range(COLUMN_COUNT):
-            for r in range(ROW_COUNT):
-                self.canvas.create_rectangle(c * SQUARE_SIZE, (r + 1) * SQUARE_SIZE, (c + 1) * SQUARE_SIZE,
-                                             (r + 2) * SQUARE_SIZE, fill='blue')
-                self.canvas.create_oval(c * SQUARE_SIZE, (r + 1) * SQUARE_SIZE, (c + 1) * SQUARE_SIZE,
-                                         (r + 2) * SQUARE_SIZE, fill='pink')
+        for c in range(self.column_count):
+            for r in range(self.row_count + 1):
+                fill_color = 'white' if r == 0 else 'blue'
+                outline_color = 'white' if r == 0 else 'black'  
+                self.canvas.create_rectangle(c * self.square_size, r * self.square_size, (c + 1) * self.square_size,
+                                             (r + 1) * self.square_size, fill=fill_color, outline=outline_color)
+                if r > 0:
+                    self.canvas.create_oval(c * self.square_size, r * self.square_size, (c + 1) * self.square_size,
+                                             (r + 1) * self.square_size, fill='pink')
 
-        x = (COLUMN_COUNT // 2) * SQUARE_SIZE
-        y = SQUARE_SIZE * 0.5
+        x = (self.column_count // 2) * self.square_size
+        y = 0.5 * self.square_size
         color = 'red' if self.current_player == 1 else 'yellow'
-        self.ball_id = self.canvas.create_oval(x - RADIUS, y - RADIUS, x + RADIUS, y + RADIUS, fill=color)
+        self.ball_id = self.canvas.create_oval(x - self.radius, y - self.radius, x + self.radius, y + self.radius, fill=color)
 
-        self.canvas.update()    
+        self.canvas.update()
+
     def bind_events(self):
         self.canvas.bind('<Motion>', self.on_mouse_motion)
         self.canvas.bind('<Button-1>', self.on_mouse_click)
@@ -75,14 +105,16 @@ class ConnectFourGUI(tk.Frame):
     def on_mouse_motion(self, event):
         if not self.game_over:
             x = event.x
-            y = SQUARE_SIZE * 0.5
+            y = self.square_size * 0.5
             color = 'red' if self.current_player == 1 else 'yellow'
-            self.canvas.coords(self.ball_id, x - RADIUS, y - RADIUS, x + RADIUS, y + RADIUS)
-            self.canvas.itemconfig(self.ball_id, fill=color)    
+            self.canvas.coords(self.ball_id, x - self.radius, y - self.radius, x + self.radius, y + self.radius)
+            self.canvas.itemconfig(self.ball_id, fill=color)
+
     def on_mouse_click(self, event):
         if not self.game_over:
-            col = event.x // SQUARE_SIZE
-            self.drop_piece(col)    
+            col = event.x // self.square_size
+            self.drop_piece(col)
+
     def drop_piece(self, col):
         row = self.get_next_open_row(col)
         if row is not None:
@@ -100,51 +132,58 @@ class ConnectFourGUI(tk.Frame):
 
             else:
                 self.current_player = 3 - self.current_player  # Switch player
-                self.name_label.config(text=f'{self.get_player_name(self.current_player)}')
-                self.timer_label.config(text='00:00', bg='lightgray')   
+                self.update_name_label()
+                self.timer_label.config(text='00:00', bg='lightgray')
+
     def get_next_open_row(self, col):
         for r in range(len(self.board) - 1, -1, -1):
             if self.board[r][col] == 0:
                 return r
-        return None     
+        return None
+
     def draw_piece(self, row, col):
-        x = (col + 0.5) * SQUARE_SIZE
-        y = (row + 1.5) * SQUARE_SIZE
+        x = (col + 0.5) * self.square_size
+        y = (row + 1.5) * self.square_size 
         color = 'red' if self.current_player == 1 else 'yellow'
-        self.canvas.create_oval(x - RADIUS, y - RADIUS, x + RADIUS, y + RADIUS, fill=color)
-        self.canvas.update() 
+        self.canvas.create_oval(x - self.radius, y - self.radius, x + self.radius, y + self.radius, fill=color)
+        self.canvas.update()
+
     def check_win(self, row, col):
-        player = self.board[row][col]     
-    # Check horizontally
-        if col <= COLUMN_COUNT - 4:
-           if np.all(self.board[row, col:col + 4] == player):
-            return True  
-    # Check vertically
-        if row <= ROW_COUNT - 4:
-           if np.all(self.board[row:row + 4, col] == player):
-            return True
+        player = self.board[row][col]
 
-    # Check diagonally (positive slope)
-        if row <= ROW_COUNT - 4 and col <= COLUMN_COUNT - 4:
-           if np.all([self.board[row + i, col + i] == player for i in range(4)]):
-            return True
+        # Check horizontally
+        if col <= self.column_count - 4:
+            if np.all(self.board[row, col:col + 4] == player):
+                return True
 
-    # Check diagonally (negative slope)
-        if row >= 3 and col <= COLUMN_COUNT - 4:
-           if np.all([self.board[row - i, col + i] == player for i in range(4)]):
-            return True
+        # Check vertically
+        if row <= self.row_count - 4:
+            if np.all(self.board[row:row + 4, col] == player):
+                return True
 
-        return False      
+        # Check diagonally (positive slope)
+        if row <= self.row_count - 4 and col <= self.column_count - 4:
+            if np.all([self.board[row + i, col + i] == player for i in range(4)]):
+                return True
+
+        # Check diagonally (negative slope)
+        if row >= 3 and col <= self.column_count - 4:
+            if np.all([self.board[row - i, col + i] == player for i in range(4)]):
+                return True
+
+        return False
+
     def check_draw(self):
         return np.all(self.board != 0)
 
     def refresh(self):
-        self.board = np.zeros((ROW_COUNT, COLUMN_COUNT))
+        self.board = np.zeros((self.row_count, self.column_count))
         self.game_over = False
         self.current_player = 1
-        self.name_label.config(text=f'{self.get_player_name(self.current_player)}')
+        self.update_name_label()
         self.timer_label.config(text='00:00', bg='lightgray')
         self.canvas.delete('all')
+        self.calculate_square_size()
         self.draw_board()
 
     def close_window(self):
@@ -156,13 +195,23 @@ class ConnectFourGUI(tk.Frame):
         elif player == 2:
             return self.player2_name
         else:
-            return ""    
-if __name__ == "__main__":
-        player1_name = sys.argv[1] if len(sys.argv) > 1 else "Player 1"
-        player2_name = sys.argv[2] if len(sys.argv) > 2 else "Player 2"
-        row_count = 6
-        column_count = 7
+            return ""
 
-        root = tk.Tk()
-        app = ConnectFourGUI(root, player1_name, player2_name, row_count, column_count)
-        root.mainloop()                
+    def update_name_label(self):
+        truncated_name = self.get_truncated_player_name()
+        self.name_label.config(text=truncated_name)
+
+    def get_truncated_player_name(self):
+        current_player_name = self.get_player_name(self.current_player)
+        return current_player_name[:5].ljust(5)
+
+
+if __name__ == "__main__":
+    player1_name = sys.argv[1] if len(sys.argv) > 1 else "Player 1"
+    player2_name = sys.argv[2] if len(sys.argv) > 2 else "Player 2"
+    row_count = 6
+    column_count = 7
+
+    root = tk.Tk()
+    app = ConnectFourGUI(root, player1_name, player2_name, row_count, column_count)
+    root.mainloop()

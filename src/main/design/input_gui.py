@@ -1,10 +1,10 @@
 import subprocess
 import tkinter as tk
 import customtkinter
-import sys
 import os
-
-sys.path.append(os.path.abspath("/path/to/connect4/logic"))
+import sys
+sys.path.append("..")
+from logic.player_vs_player import ConnectFourGUI
 
 class ConnectFourSetup:
     def __init__(self):
@@ -28,11 +28,6 @@ class ConnectFourSetup:
         input_frame = tk.Frame(self.window, bg="white")
         input_frame.pack(pady=10)
 
-
-        tk.Label(input_frame, text="Write your name:", bg="white",font=("Helvetica", 15)).grid(row=0, column=0, pady=5, padx=5)
-        self.name_entry = customtkinter.CTkEntry(input_frame, placeholder_text="Your Name")
-        self.name_entry.grid(row=0, column=1, pady=5, padx=5)
-
         tk.Label(self.window, text="Choose Table Size (rows x columns)",bg="white",font=("Helvetica", 15)).pack(pady=10)
         self.grid_size_var = customtkinter.StringVar()
         size_options = ["6x7", "5x4", "6x5", "8x7", "9x7", "10x7", "8x8"]
@@ -45,56 +40,76 @@ class ConnectFourSetup:
         button_frame = tk.Frame(self.window, bg="white")
         button_frame.pack(pady=5)
 
-        user_vs_user_button = tk.Button(button_frame, text="🧑 vs 🧑", font=("Helvetica", 22), command=lambda: self.set_game_mode("User vs User"), width=15,height=3,bg="yellow")
+        user_vs_user_button = tk.Button(button_frame, text="🧑 vs 🧑", font=("Helvetica", 22), command=self.start_user_vs_user_popup, width=15, height=3, bg="yellow")
         user_vs_user_button.pack(side="left", padx=10)
 
-        user_vs_comp_button = tk.Button(button_frame, text="🧑 vs 💻", font=("Helvetica", 22), command=lambda: self.set_game_mode("User vs Comp"), width=15,height=3,bg="yellow")
+        user_vs_comp_button = tk.Button(button_frame, text="🧑 vs 💻", font=("Helvetica", 22), command=lambda: self.set_game_mode("User vs Comp"), width=15, height=3, bg="yellow")
         user_vs_comp_button.pack(side="left", padx=10)
-
-        
-        button = tk.Button(master=self.window,text="Start", font=("Helvetica", 12),command=self.submit_callback, width=10, height=2,bg="red")
-        button.pack(pady=40)
 
     def set_game_mode(self, mode):
         self.game_mode = mode
-        
-    def get_player_name(self):
-        return self.name_entry.get()
 
     def get_grid_size(self):
         return self.grid_size_var.get()
 
-    
     def submit_callback(self):
         self.player_name = self.get_player_name()
         self.grid_size = self.get_grid_size()
-        
 
-        if not self.player_name or not self.grid_size or not self.game_mode:
-            print("Please enter your name, choose the table size, and select the game mode.")
-            return
+    def start_user_vs_user_popup(self):
+        # Create a new window for player names
+        popup_window = tk.Toplevel(self.window)
+        popup_window.title("Enter Player Names")
+        popup_window.configure(bg="white")
 
-        row_count, column_count = map(int, self.grid_size.split("x"))
+        header_frame = tk.Frame(popup_window, bg="red")
+        header_frame.pack(fill=tk.X)
 
-        print(f"Player Name: {self.player_name}")
-        print(f"Grid Size: {self.grid_size}")
-        print(f"Game Mode: {self.game_mode}")
+        tk.Label(header_frame, text="Enter Player Names", font=("Helvetica", 18, "bold"), bg="red", fg="yellow").pack(pady=10)
 
-        # Close the setup window
+        tk.Label(popup_window, text="Enter Player 1 name:", font=("Helvetica", 12), bg="white").pack(pady=5)
+        entry_player1 = tk.Entry(popup_window, font=("Helvetica", 12), validate="key", validatecommand=(popup_window.register(self.validate_entry), "%P"))
+        entry_player1.pack(pady=5)
+
+        tk.Label(popup_window, text="Enter Player 2 name:", font=("Helvetica", 12), bg="white").pack(pady=5)
+        entry_player2 = tk.Entry(popup_window, font=("Helvetica", 12), validate="key", validatecommand=(popup_window.register(self.validate_entry), "%P"))
+        entry_player2.pack(pady=5)
+
+        button_frame = tk.Frame(popup_window, bg="white")
+        button_frame.pack(pady=10)
+
+        start_button = tk.Button(button_frame, text="Start Game", command=lambda: self.start_user_vs_user_game(entry_player1.get(), entry_player2.get(), popup_window), font=("Helvetica", 14), width=15, height=2, bg="yellow", fg="black")
+        start_button.pack()
+
+        # Center the popup window
+        popup_window.geometry("300x270")
+        popup_window.geometry("+%d+%d" % ((self.window.winfo_screenwidth() - popup_window.winfo_reqwidth()) // 2,
+                                          (self.window.winfo_screenheight() - popup_window.winfo_reqheight()) // 2))
+
+        entry_player1.focus_set()
+
+    def validate_entry(self, text):
+        return len(text) <= 5
+
+    def start_user_vs_user_game(self, player1, player2, popup_window):
+        player_name1 = player1
+        player_name2 = player2
+        grid_size = self.grid_size_var.get()
+
+        row_count, column_count = map(int, grid_size.split("x"))
+
+        print(f"Grid Size: {grid_size}")
+
+        # Close the popup window
+        popup_window.destroy()
+
+        # Create an instance of ConnectFourGUI
+        root = tk.Tk()
+        game_instance = ConnectFourGUI(root, player_name1, player_name2, row_count, column_count)
+        root.protocol("WM_DELETE_WINDOW", self.on_game_window_close)  # Bind a callback for window close event
+        root.mainloop()
         self.window.destroy()
 
-        print("Launching Connect Four game...")
-        # Import the game script dynamically
-        if self.game_mode == "User vs User":
-            
-            subprocess.run(["python", "p2.py", self.player_name, "", self.player_name, f"{row_count}x{column_count}"], shell=True)  # Pass player names and dimensions as command-line arguments
-            # subprocess.Popen(["python", "p2.py", self.player_name, str(row_count), str(column_count)])
-
-        elif self.game_mode == "User vs Comp":
-            os.chdir("C:\\Users\\HP\\Desktop\\daaa\\connect4\\logic")
-
-            subprocess.run(["python", "connect4_with_Ai.py",self.player_name,self.player_name, f"{row_count}x{column_count}" ], shell=True)
-            # subprocess.Popen(["python", "connect4_with_Ai.py", self.player_name, str(row_count), str(column_count)])
 
 if __name__ == "__main__":
     setup = ConnectFourSetup()
