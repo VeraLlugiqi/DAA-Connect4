@@ -1,8 +1,10 @@
 import subprocess
 import tkinter as tk
 import customtkinter
-from tkinter import simpledialog
-from tkinter import ttk
+import sys
+import os
+
+sys.path.append(os.path.abspath("/path/to/connect4/logic"))
 
 class ConnectFourSetup:
     def __init__(self):
@@ -38,6 +40,8 @@ class ConnectFourSetup:
         size_dropdown.set("6x7")  # Default value
         size_dropdown.pack(pady=5)
 
+        tk.Label(self.window, text="Game Mode:", bg="white", font=("Helvetica", 15)).pack(pady=5)
+
         button_frame = tk.Frame(self.window, bg="white")
         button_frame.pack(pady=5)
 
@@ -53,6 +57,7 @@ class ConnectFourSetup:
 
     def set_game_mode(self, mode):
         self.game_mode = mode
+        
     def get_player_name(self):
         return self.name_entry.get()
 
@@ -63,24 +68,33 @@ class ConnectFourSetup:
     def submit_callback(self):
         self.player_name = self.get_player_name()
         self.grid_size = self.get_grid_size()
-        game_mode = self.get_game_mode()
+        
 
-        if not self.player_name or not self.grid_size:
-            print("Please enter your name and choose the table size first.")
+        if not self.player_name or not self.grid_size or not self.game_mode:
+            print("Please enter your name, choose the table size, and select the game mode.")
             return
 
         row_count, column_count = map(int, self.grid_size.split("x"))
 
         print(f"Player Name: {self.player_name}")
         print(f"Grid Size: {self.grid_size}")
-        print(f"Game Mode: {game_mode}")
+        print(f"Game Mode: {self.game_mode}")
 
         # Close the setup window
         self.window.destroy()
 
         print("Launching Connect Four game...")
-        subprocess.Popen(["python", "connect4.py", self.player_name, str(row_count), str(column_count), game_mode])
+        # Import the game script dynamically
+        if self.game_mode == "User vs User":
+            
+            subprocess.run(["python", "p2.py", self.player_name, "", self.player_name, f"{row_count}x{column_count}"], shell=True)  # Pass player names and dimensions as command-line arguments
+            # subprocess.Popen(["python", "p2.py", self.player_name, str(row_count), str(column_count)])
 
+        elif self.game_mode == "User vs Comp":
+            os.chdir("C:\\Users\\HP\\Desktop\\daaa\\connect4\\logic")
+
+            subprocess.run(["python", "connect4_with_Ai.py",self.player_name,self.player_name, f"{row_count}x{column_count}" ], shell=True)
+            # subprocess.Popen(["python", "connect4_with_Ai.py", self.player_name, str(row_count), str(column_count)])
 
 if __name__ == "__main__":
     setup = ConnectFourSetup()
