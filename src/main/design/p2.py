@@ -1,4 +1,26 @@
+import os
 import tkinter as tk
+import subprocess
+import sys
+
+def start_game():
+    player1_name = sys.argv[1] if len(sys.argv) > 1 else "Player 1"
+    player2_name = entry_emri.get()
+
+    if player2_name:
+        os.chdir("C:\\Users\\HP\\Desktop\\daaa\\connect4\\logic")
+
+        command = ["python", "player_vs_player.py", player1_name, player2_name]
+        
+        # Check if playing against computer
+        if "--computer" in sys.argv:
+            command.append("--computer")
+
+        subprocess.Popen(command)
+        dritare_emri.destroy()
+    else:
+        etiketa_rezultati.config(text="Please enter a valid player name.")
+
 
 # Krijo një dritare
 dritare_emri = tk.Tk()
