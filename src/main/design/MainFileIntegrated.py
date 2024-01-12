@@ -47,9 +47,9 @@ class ConnectFourGUI:
         self.ball_id = None  # To store the ID of the drawn ball
 
 
-        self.count_down()
         self.draw_board()
         self.bind_events()
+        self.count_down()
 
     def draw_board(self):
         for c in range(COLUMN_COUNT):
