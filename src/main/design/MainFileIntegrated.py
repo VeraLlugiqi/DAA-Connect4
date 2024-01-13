@@ -143,6 +143,7 @@ class ConnectFourGUI:
         self.draw_board()
         self.connect_four_label.config(text='Connect Four', fg='yellow')
 
+        
     def count_down(self, total_seconds):
         while total_seconds >= 0:
             minutes, seconds = divmod(total_seconds, 60)
