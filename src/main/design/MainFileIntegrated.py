@@ -54,29 +54,36 @@ class ConnectFourGUI:
       #  self.count_down(240)
 
     def draw_board(self):
-        self.canvas.delete("all")  # Clear the canvas before redrawing
+        self.canvas.delete("all")
 
         for c in range(COLUMN_COUNT):
             for r in range(ROW_COUNT):
+                # Drawing the rectangles (cells) with blue color
                 self.canvas.create_rectangle(c * SQUARE_SIZE, (r + 1) * SQUARE_SIZE, (c + 1) * SQUARE_SIZE,
                                              (r + 2) * SQUARE_SIZE, fill='blue')
+                # Drawing the circles (pieces) with white color
                 self.canvas.create_oval(c * SQUARE_SIZE, (r + 1) * SQUARE_SIZE, (c + 1) * SQUARE_SIZE,
                                         (r + 2) * SQUARE_SIZE, fill='white')
 
         for c in range(COLUMN_COUNT):
             for r in range(ROW_COUNT):
                 if self.board[r][c] == PLAYER_PIECE:
-                    self.canvas.create_oval(c * SQUARE_SIZE, (r + 1) * SQUARE_SIZE, (c + 1) * SQUARE_SIZE,
-                                            (r + 2) * SQUARE_SIZE, fill='red')
+                    # Player's piece (red circle)
+                    self.canvas.create_oval(c * SQUARE_SIZE, (ROW_COUNT - r) * SQUARE_SIZE,
+                                            (c + 1) * SQUARE_SIZE, (ROW_COUNT - r + 1) * SQUARE_SIZE,
+                                            fill='red')
                 elif self.board[r][c] == AI_PIECE:
-                    self.canvas.create_oval(c * SQUARE_SIZE, (r + 1) * SQUARE_SIZE, (c + 1) * SQUARE_SIZE,
-                                            (r + 2) * SQUARE_SIZE, fill='yellow')
+                    # AI's piece (yellow circle)
+                    self.canvas.create_oval(c * SQUARE_SIZE, (ROW_COUNT - r) * SQUARE_SIZE,
+                                            (c + 1) * SQUARE_SIZE, (ROW_COUNT - r + 1) * SQUARE_SIZE,
+                                            fill='yellow')
 
         x = (COLUMN_COUNT // 2) * SQUARE_SIZE
         y = SQUARE_SIZE * 0.5
         self.ball_id = self.canvas.create_oval(x - RADIUS, y - RADIUS, x + RADIUS, y + RADIUS, fill='red')
-
         self.canvas.update()
+
+
 
     def bind_events(self):
         self.canvas.bind('<Motion>', self.on_mouse_motion)
@@ -111,13 +118,18 @@ class ConnectFourGUI:
             print(f"AI moves to column {col}")
             row = get_next_open_row(self.board, col)
             drop_piece(self.board, row, col, AI_PIECE)
+
             self.draw_board()
 
             if winning_move(self.board, AI_PIECE):
                 print("AI wins!!")
                 self.display_winner("AI")
                 return
-            self.draw_board()
+
+            
+
+        if is_terminal_node(self.board):
+            self.display_winner("Tie")
 
     def display_winner(self, winner):
         self.connect_four_label.config(text=f'Connect Four - {winner} wins!!', fg='red')
