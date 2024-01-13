@@ -45,7 +45,7 @@ class ConnectFourSetup:
         user_vs_user_button = tk.Button(button_frame, text="🧑 vs 🧑", font=("Helvetica", 22), command=self.start_user_vs_user_popup, width=15, height=3, bg="yellow")
         user_vs_user_button.pack(side="left", padx=10)
 
-        user_vs_comp_button = tk.Button(button_frame, text="🧑 vs 💻", font=("Helvetica", 22), command=lambda: self.set_game_mode("User vs Comp"), width=15, height=3, bg="yellow")
+        user_vs_comp_button = tk.Button(button_frame, text="🧑 vs 💻", font=("Helvetica", 22), command=lambda:self.set_game_mode("User vs Comp"), width=15, height=3, bg="yellow")
         user_vs_comp_button.pack(side="left", padx=10)
 
     def set_game_mode(self, mode):
@@ -108,14 +108,16 @@ class ConnectFourSetup:
         # Create an instance of ConnectFourGUI
         root = tk.Tk()
     # Adjust window size
-        adjusted_width = 600  # Adjust this value based on your preference
-        adjusted_height = 650  # Adjust this value based on your preference
+        adjusted_width = 900  # Adjust this value based on your preference
+        adjusted_height = 700  # Adjust this value based on your preference
         root.geometry(f"{adjusted_width}x{adjusted_height}")
+        root.configure(bg="white")
 
     # Center the window on the screen
         extra_right_margin = 200  # Adjust this value based on your preference
+        extra_top_margin = 50
         root.geometry("+%d+%d" % ((root.winfo_screenwidth() - adjusted_width + extra_right_margin) // 2,
-                               (root.winfo_screenheight() - adjusted_height) // 2))
+                               (root.winfo_screenheight() - adjusted_height - extra_top_margin) // 2))
         
         
 

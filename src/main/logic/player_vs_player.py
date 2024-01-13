@@ -6,21 +6,39 @@ class ConnectFourGUI(tk.Frame):
     def __init__(self, master, player1_name, player2_name, row_count, column_count):
         super().__init__(master)
         self.master.title("Connect Four")
+        self.master.configure(bg="white")
         self.master.resizable(width=False, height=False)
         self.player1_name = player1_name
         self.player2_name = player2_name
+
+
+
+
+        adjusted_width = 900  # Adjust this value based on your preference
+        adjusted_height = 700  # Adjust this value based on your preference
+        self.master.geometry(f"{adjusted_width}x{adjusted_height}")
+        self.master.configure(bg="white")
+
+    # Center the window on the screen
+        extra_right_margin = 200  # Adjust this value based on your preference
+        extra_top_margin = 50
+        self.master.geometry("+%d+%d" % ((self.master.winfo_screenwidth() - adjusted_width + extra_right_margin) // 2,
+                               (self.master.winfo_screenheight() - adjusted_height - extra_top_margin) // 2))
 
         self.current_player = 1  
         self.game_over = False
 
         connect_four_frame = tk.Frame(master, bg='red')
-        connect_four_frame.grid(row=0, column=0, columnspan=2, sticky='ew')
+        connect_four_frame.grid(row=0, column=0, columnspan=10 ,sticky='nsew')
+
+        for i in range(10):
+            master.columnconfigure(i, weight=1)
 
         connect_four_label = tk.Label(connect_four_frame, text='Connect Four', font=('Helvetica', 24), bg='red', fg='yellow')
         connect_four_label.pack(pady=10)
 
         self.button_frame = tk.Frame(master, bg='white')
-        self.button_frame.grid(row=1, column=0, columnspan=2, pady=20, sticky='ew')
+        self.button_frame.grid(row=1, column=0, columnspan=10, pady=20, sticky='ew')
 
         self.name_frame = tk.Frame(self.button_frame, bg='white')
         self.name_frame.pack(side='left', padx=20)
@@ -31,19 +49,20 @@ class ConnectFourGUI(tk.Frame):
         tk.Label(self.button_frame, text='', bg='white').pack(side='left', padx=50)
 
         self.timer_label = tk.Label(self.button_frame, text='00:00', font=('Helvetica', 14), bg='lightgray')
-        self.timer_label.pack(side='left', padx=20)
+        self.timer_label.pack(side='left', padx=(160, 30), anchor='center')
 
-        tk.Label(self.button_frame, text='', bg='white').pack(side='left', padx=50)
+        tk.Label(self.button_frame, text='', bg='white', width=10).pack(side='left')
+
 
         button_width = 5
-        self.refresh_button = tk.Button(self.button_frame, text='🔄', command=self.refresh, font=('Helvetica', 12), width=button_width, bg='yellow', fg='black')
-        self.refresh_button.pack(side='left', padx=20)
-
         self.close_button = tk.Button(self.button_frame, text='❌', command=self.close_window, font=('Helvetica', 12), width=button_width, bg='yellow', fg='black')
-        self.close_button.pack(side='right', padx=20)
+        self.close_button.pack(side='right', padx=20, anchor='e')  
+
+        self.refresh_button = tk.Button(self.button_frame, text='🔄', command=self.refresh, font=('Helvetica', 12), width=button_width, bg='yellow', fg='black')
+        self.refresh_button.pack(side='right', padx=(20, 20))
 
         self.canvas = tk.Canvas(master, bg='white')
-        self.canvas.grid(row=2, column=0, columnspan=2)
+        self.canvas.grid(row=2, column=0, columnspan=10)
 
         self.row_count = row_count
         self.column_count = column_count
@@ -66,11 +85,20 @@ class ConnectFourGUI(tk.Frame):
         square_size_height = max_height // (self.row_count + 1)  
 
         # i percaktojna dimensionet sa me u kon ni square nqs tabela ma e vogel / madhe
-        max_square_size_small = 70
-        max_square_size_large = 45
+        max_square_size_extrasmall = 90
+        max_square_size_small = 78
+        max_square_size_medium = 62
+        max_square_size_smallmedium = 62
+        max_square_size_large = 50
 
-        if self.row_count * self.column_count <= 42:  # percaktojme madhesine e tabeles madhe/vogel
+        if self.row_count * self.column_count <= 31:  # percaktojme madhesine e tabeles madhe/vogel
+            self.square_size = min(square_size_width, square_size_height, max_square_size_extrasmall)
+        elif self.row_count * self.column_count <= 43:  # percaktojme madhesine e tabeles madhe/vogel
             self.square_size = min(square_size_width, square_size_height, max_square_size_small)
+        elif self.row_count * self.column_count <= 57:  
+            self.square_size = min(square_size_width, square_size_height, max_square_size_medium)
+        elif self.row_count * self.column_count <= 65 and self.row_count * self.column_count!=63:  
+            self.square_size = min(square_size_width, square_size_height, max_square_size_smallmedium)   
         else:
             self.square_size = min(square_size_width, square_size_height, max_square_size_large)
 
@@ -81,10 +109,11 @@ class ConnectFourGUI(tk.Frame):
         self.canvas.config(width=canvas_width, height=canvas_height)
 
     def draw_board(self):
+       
         for c in range(self.column_count):
             for r in range(self.row_count + 1):
                 fill_color = 'white' if r == 0 else 'blue'
-                outline_color = 'white' if r == 0 else 'black'  
+                outline_color = 'white' if r == 0 else 'blue'  
                 self.canvas.create_rectangle(c * self.square_size, r * self.square_size, (c + 1) * self.square_size,
                                              (r + 1) * self.square_size, fill=fill_color, outline=outline_color)
                 if r > 0:
