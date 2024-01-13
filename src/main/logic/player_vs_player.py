@@ -189,6 +189,7 @@ class ConnectFourGUI(tk.Frame):
     def close_window(self):
         self.master.destroy()
 
+    #Merr emrin e player
     def get_player_name(self, player):
         if player == 1:
             return self.player1_name
