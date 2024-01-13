@@ -112,19 +112,30 @@ class ConnectFourGUI2:
             print(f"AI moves to column {col}")
             row = get_next_open_row(self.board, col)
             drop_piece(self.board, row, col, AI_PIECE)
-
             self.draw_board()
 
             if winning_move(self.board, AI_PIECE):
                 print("AI wins!!")
                 self.display_winner("AI")
                 return
-
-        if is_terminal_node(self.board):
-            self.display_winner("Tie")
+            self.draw_board()
 
     def display_winner(self, winner):
-        self.connect_four_label.config(text=f'Connect Four - {winner} wins!!', fg='red')
+        if winner == "Player":
+            self.open_win_window()
+        elif winner == "AI":
+            self.open_loss_window()
+        else:
+            self.connect_four_label.config(text=f'Connect Four - {winner} Tied!', fg='red')
+
+    def open_win_window(self):
+        import winner_box
+
+    def open_loss_window(self):
+        import loser_box
+
+    def close_window(self):
+        self.master.destroy()
 
     def refresh(self):
         # Reset the game state
