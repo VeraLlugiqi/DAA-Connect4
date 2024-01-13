@@ -204,7 +204,7 @@ class ConnectFourGUI(tk.Frame):
 
     def get_truncated_player_name(self):
         current_player_name = self.get_player_name(self.current_player)
-        return current_player_name[:5].ljust(5)
+        return current_player_name[:6].ljust(6)
 
 
 if __name__ == "__main__":
