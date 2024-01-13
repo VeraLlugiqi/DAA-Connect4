@@ -3,7 +3,7 @@ import tkinter as tk
 import customtkinter
 import os
 import sys
-sys.path.append("..")
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from logic.player_vs_player import ConnectFourGUI
 
 class ConnectFourSetup:
@@ -16,6 +16,8 @@ class ConnectFourSetup:
         self.window.title("Connect Four Setup")
         self.window.geometry("900x700")
         self.window.configure(bg="white")
+        self.window.resizable(False, False)
+
 
         header_frame = tk.Frame(self.window, bg="red")
         header_frame.pack(fill=tk.X)
@@ -81,15 +83,13 @@ class ConnectFourSetup:
         start_button = tk.Button(button_frame, text="Start Game", command=lambda: self.start_user_vs_user_game(entry_player1.get(), entry_player2.get(), popup_window), font=("Helvetica", 14), width=15, height=2, bg="yellow", fg="black")
         start_button.pack()
 
-        # Center the popup window
-        popup_window.geometry("300x270")
-        popup_window.geometry("+%d+%d" % ((self.window.winfo_screenwidth() - popup_window.winfo_reqwidth()) // 2,
-                                          (self.window.winfo_screenheight() - popup_window.winfo_reqheight()) // 2))
-
+        popup_window.geometry("+%d+%d" % ((self.window.winfo_rootx() + (self.window.winfo_reqwidth() - popup_window.winfo_reqwidth()) ),
+                                       (self.window.winfo_rooty()//2 + (self.window.winfo_reqheight() //2))))
         entry_player1.focus_set()
+        popup_window.resizable(False,False)
 
     def validate_entry(self, text):
-        return len(text) <= 5
+        return len(text) <= 6
 
     def start_user_vs_user_game(self, player1, player2, popup_window):
         player_name1 = player1
@@ -103,12 +103,34 @@ class ConnectFourSetup:
         # Close the popup window
         popup_window.destroy()
 
+
+        self.window.destroy()
         # Create an instance of ConnectFourGUI
         root = tk.Tk()
+    # Adjust window size
+        adjusted_width = 600  # Adjust this value based on your preference
+        adjusted_height = 650  # Adjust this value based on your preference
+        root.geometry(f"{adjusted_width}x{adjusted_height}")
+
+    # Center the window on the screen
+        extra_right_margin = 200  # Adjust this value based on your preference
+        root.geometry("+%d+%d" % ((root.winfo_screenwidth() - adjusted_width + extra_right_margin) // 2,
+                               (root.winfo_screenheight() - adjusted_height) // 2))
+        
+        
+
         game_instance = ConnectFourGUI(root, player_name1, player_name2, row_count, column_count)
         root.mainloop()
+        
+        
 
 
 if __name__ == "__main__":
     setup = ConnectFourSetup()
+    setup.window.update_idletasks()
+    extra_height = 100  # Adjust this value based on your preference
+    setup.window.geometry("+%d+%d" % ((setup.window.winfo_screenwidth() - setup.window.winfo_reqwidth()) // 2,
+                                       (setup.window.winfo_screenheight()//2 - setup.window.winfo_reqheight() + extra_height) // 2))
+    
     setup.window.mainloop()
+

@@ -89,7 +89,7 @@ class ConnectFourGUI(tk.Frame):
                                              (r + 1) * self.square_size, fill=fill_color, outline=outline_color)
                 if r > 0:
                     self.canvas.create_oval(c * self.square_size, r * self.square_size, (c + 1) * self.square_size,
-                                             (r + 1) * self.square_size, fill='pink')
+                                             (r + 1) * self.square_size, fill='white')
 
         x = (self.column_count // 2) * self.square_size
         y = 0.5 * self.square_size
