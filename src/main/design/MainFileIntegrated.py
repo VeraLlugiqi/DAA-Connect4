@@ -1,6 +1,7 @@
 import tkinter as tk
 import numpy as np
 import time
+import sys
 from backend_logic import create_board, drop_piece, is_valid_location, get_next_open_row, winning_move, minimax, AI_PIECE, PLAYER_PIECE
 from backend_logic import is_terminal_node
 
@@ -9,11 +10,14 @@ COLUMN_COUNT = 6
 SQUARE_SIZE = 80
 RADIUS = int(SQUARE_SIZE / 2)
 
-class ConnectFourGUI:
+class ConnectFourGUI2:
     def close_window(self):
         self.master.destroy()
 
-    def __init__(self, master):
+    def __init__(self, master, player_name, row_count, column_count):
+        self.player_name = player_name if player_name else "Player 1"  # Ensure a default name if not provided
+        self.row_count = row_count
+        self.column_count = column_count
 
         self.master = master
         self.master.title("Connect Four")
@@ -27,22 +31,15 @@ class ConnectFourGUI:
         button_frame = tk.Frame(master, bg='white')
         button_frame.grid(row=1, column=0, columnspan=2, pady=20, sticky='ew')
 
-        self.name_label = tk.Label(button_frame, text='\u200bName:', font=('Helvetica', 14), bg='yellow', fg='black')
+        self.name_label = tk.Label(button_frame, text=f'Name: {self.player_name}', font=('Helvetica', 14), bg='yellow', fg='black')
         self.name_label.pack(side='left', padx=20)
 
         tk.Label(button_frame, text='', bg='white').pack(side='left', padx=50)
 
-        self.time_var = tk.StringVar(value='04 : 00')
-        self.time_lbl = tk.Label(font=('Arial', 14), textvariable=self.time_var, bg='lightgray')
-        self.time_lbl.grid(row=1, column=0, padx=20)
-
-        tk.Label(button_frame, text='', bg='white').pack(side='left', padx=50)
-
-        button_width = 5
-        self.refresh_button = tk.Button(button_frame, text='🔄', command=self.refresh, font=('Helvetica', 12), width=button_width, bg='yellow', fg='black')
+        self.refresh_button = tk.Button(button_frame, text='🔄', command=self.refresh, font=('Helvetica', 12), width=5, bg='yellow', fg='black')
         self.refresh_button.pack(side='left', padx=20)
 
-        self.close_button = tk.Button(button_frame, text='❌', command=self.close_window, font=('Helvetica', 12), width=button_width, bg='yellow', fg='black')
+        self.close_button = tk.Button(button_frame, text='❌', command=self.close_window, font=('Helvetica', 12), width=5, bg='yellow', fg='black')
         self.close_button.pack(side='right', padx=20)
 
         self.canvas = tk.Canvas(master, width=COLUMN_COUNT * SQUARE_SIZE, height=(ROW_COUNT + 1) * SQUARE_SIZE, bg='white')
@@ -51,7 +48,6 @@ class ConnectFourGUI:
         self.board = create_board()
         self.draw_board()
         self.bind_events()
-      #  self.count_down(240)
 
     def draw_board(self):
         self.canvas.delete("all")
@@ -82,8 +78,6 @@ class ConnectFourGUI:
         y = SQUARE_SIZE * 0.5
         self.ball_id = self.canvas.create_oval(x - RADIUS, y - RADIUS, x + RADIUS, y + RADIUS, fill='red')
         self.canvas.update()
-
-
 
     def bind_events(self):
         self.canvas.bind('<Motion>', self.on_mouse_motion)
@@ -126,16 +120,11 @@ class ConnectFourGUI:
                 self.display_winner("AI")
                 return
 
-            
-
         if is_terminal_node(self.board):
             self.display_winner("Tie")
 
     def display_winner(self, winner):
         self.connect_four_label.config(text=f'Connect Four - {winner} wins!!', fg='red')
-
-      
-  # Add any additional logic you want when the game is over
 
     def refresh(self):
         # Reset the game state
@@ -143,27 +132,27 @@ class ConnectFourGUI:
         self.draw_board()
         self.connect_four_label.config(text='Connect Four', fg='yellow')
 
-        
-    def count_down(self, total_seconds):
-        while total_seconds >= 0:
-            minutes, seconds = divmod(total_seconds, 60)
-            time_str = f'{minutes:02d} : {seconds:02d}'
-            self.time_var.set(time_str)
-            self.master.update()
-            time.sleep(1)
-            total_seconds -= 1
+    def get_player_name(self):
+        return self.player_name
 
-        self.time_var.set("00 : 00")
-        self.open_result_window()
+    def update_name_label(self, is_ai_turn=False):
+        if is_ai_turn:
+            truncated_name = "AI"
+        else:
+            truncated_name = self.get_truncated_player_name()
+            self.name_label.config(text=truncated_name)
 
-    def open_result_window(self):
-        result_window = tk.Toplevel(self.master)
-        result_window.title("Result Window")
 
-        label = tk.Label(result_window, text="Timer reached 00:00", font=('Arial', 16))
-        label.pack(padx=20, pady=20)
+    def get_truncated_player_name(self):
+        current_player_name = self.get_player_name()
+        return current_player_name[:6].ljust(6)
 
 if __name__ == "__main__":
+    player_name = sys.argv[1] if len(sys.argv) > 1 else "Player 1"
+    row_count = 6
+    column_count = 7
+
     root = tk.Tk()
-    app = ConnectFourGUI(root)
+    app = ConnectFourGUI2(root, player_name, row_count, column_count)
+    app.update_name_label()  # Update the name label initially
     root.mainloop()

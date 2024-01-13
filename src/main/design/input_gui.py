@@ -1,10 +1,10 @@
-import subprocess
 import tkinter as tk
 import customtkinter
 import os
 import sys
 sys.path.append("..")
 from logic.player_vs_player import ConnectFourGUI
+from MainFileIntegrated import ConnectFourGUI2
 
 class ConnectFourSetup:
     def __init__(self):
@@ -20,7 +20,7 @@ class ConnectFourSetup:
         header_frame = tk.Frame(self.window, bg="red")
         header_frame.pack(fill=tk.X)
 
-        tk.Label(header_frame, text="PLAY CONNECT 4",  font=("Helvetica", 45, "bold"), bg="red", fg="yellow" ).pack(pady=50)
+        tk.Label(header_frame, text="PLAY CONNECT 4", font=("Helvetica", 45, "bold"), bg="red", fg="yellow" ).pack(pady=50)
 
         padding_label = tk.Label(self.window, text="", bg="white")
         padding_label.pack(pady=15)
@@ -43,7 +43,7 @@ class ConnectFourSetup:
         user_vs_user_button = tk.Button(button_frame, text="🧑 vs 🧑", font=("Helvetica", 22), command=self.start_user_vs_user_popup, width=15, height=3, bg="yellow")
         user_vs_user_button.pack(side="left", padx=10)
 
-        user_vs_comp_button = tk.Button(button_frame, text="🧑 vs 💻", font=("Helvetica", 22), command=lambda: self.set_game_mode("User vs Comp"), width=15, height=3, bg="yellow")
+        user_vs_comp_button = tk.Button(button_frame, text="🧑 vs 💻", font=("Helvetica", 22), command=self.start_user_vs_comp_popup, width=15, height=3, bg="yellow")
         user_vs_comp_button.pack(side="left", padx=10)
 
     def set_game_mode(self, mode):
@@ -88,9 +88,6 @@ class ConnectFourSetup:
 
         entry_player1.focus_set()
 
-    def validate_entry(self, text):
-        return len(text) <= 5
-
     def start_user_vs_user_game(self, player1, player2, popup_window):
         player_name1 = player1
         player_name2 = player2
@@ -108,6 +105,52 @@ class ConnectFourSetup:
         game_instance = ConnectFourGUI(root, player_name1, player_name2, row_count, column_count)
         root.mainloop()
 
+    def validate_entry(self, text):
+        return len(text) <= 6
+
+    def start_user_vs_comp_popup(self):
+        # Create a new window for player name
+        popup_window = tk.Toplevel(self.window)
+        popup_window.title("Enter Player Name")
+        popup_window.configure(bg="white")
+
+        header_frame = tk.Frame(popup_window, bg="red")
+        header_frame.pack(fill=tk.X)
+
+        tk.Label(header_frame, text="Enter Your Name", font=("Helvetica", 18, "bold"), bg="red", fg="yellow").pack(pady=10)
+
+        tk.Label(popup_window, text="Enter Your Name:", font=("Helvetica", 12), bg="white").pack(pady=5)
+        entry_player = tk.Entry(popup_window, font=("Helvetica", 12), validate="key", validatecommand=(popup_window.register(self.validate_entry), "%P"))
+        entry_player.pack(pady=5)
+
+        button_frame = tk.Frame(popup_window, bg="white")
+        button_frame.pack(pady=10)
+
+        start_button = tk.Button(button_frame, text="Start Game", command=lambda: self.start_user_vs_comp_game(entry_player.get(), popup_window), font=("Helvetica", 14), width=15, height=2, bg="yellow", fg="black")
+        start_button.pack()
+
+        # Center the popup window
+        popup_window.geometry("300x270")
+        popup_window.geometry("+%d+%d" % ((self.window.winfo_screenwidth() - popup_window.winfo_reqwidth()) // 2,
+                                              (self.window.winfo_screenheight() - popup_window.winfo_reqheight()) // 2))
+
+        entry_player.focus_set()
+
+    def start_user_vs_comp_game(self, player, popup_window):
+        player_name = player
+        grid_size = self.grid_size_var.get()
+
+        row_count, column_count = map(int, grid_size.split("x"))
+
+        print(f"Grid Size: {grid_size}")
+
+        # Close the popup window
+        popup_window.destroy()
+
+        root = tk.Tk()
+        game_instance = ConnectFourGUI2(root, player_name, row_count, column_count)
+        game_instance.update_name_label()  # Update the name label
+        root.mainloop()
 
 if __name__ == "__main__":
     setup = ConnectFourSetup()
