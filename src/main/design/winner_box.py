@@ -11,12 +11,13 @@ def option_selected(option, refresh_function, window_to_destroy, main_game_windo
         window_to_destroy.destroy()
     elif option == "Home":
         window_to_destroy.destroy()
+        main_game_window.destroy()
         open_input_gui(main_game_window)
 
 def open_input_gui(main_game_window):
     subprocess.run(["python", "input_gui.py"])
     main_game_window.destroy()
-    
+
 def create_rounded_button(parent, text, command):
     button = tk.Button(parent, text=text, command=command)
     button.config(width=15, height=2, bd=0, bg='red', fg='black', font=('Helvetica', 12))
