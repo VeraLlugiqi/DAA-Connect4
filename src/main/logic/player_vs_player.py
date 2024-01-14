@@ -71,7 +71,7 @@ class ConnectFourGUI(tk.Frame):
         self.close_button = tk.Button(self.button_frame, text='❌', command=self.close_window, font=('Helvetica', 12), width=button_width, bg='yellow', fg='black')
         self.close_button.pack(side='right', padx=20, anchor='e')  
 
-        self.refresh_button = tk.Button(self.button_frame, text='🔄', command=self.refresh, font=('Helvetica', 12), width=button_width, bg='yellow', fg='black')
+        self.refresh_button = tk.Button(self.button_frame, text='🔄', command=self.do_refresh, font=('Helvetica', 12), width=button_width, bg='yellow', fg='black')
         self.refresh_button.pack(side='right', padx=(20, 20))
 
         self.canvas = tk.Canvas(master, bg='white')
@@ -277,6 +277,15 @@ class ConnectFourGUI(tk.Frame):
 
     def check_draw(self):
         return np.all(self.board != 0)
+
+    def do_refresh(self):
+        self.board = np.zeros((self.row_count, self.column_count))
+        self.game_over = False
+        self.current_player = 1
+        self.update_name_label()
+        self.canvas.delete('all')
+        self.calculate_square_size()
+        self.draw_board()    
 
     def refresh(self):
       # Stop the existing timer thread if it's running
