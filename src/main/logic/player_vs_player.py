@@ -1,6 +1,8 @@
 import tkinter as tk
 import numpy as np
 import sys
+import threading
+import time
 
 class ConnectFourGUI(tk.Frame):
     def __init__(self, master, player1_name, player2_name, row_count, column_count):
@@ -11,7 +13,12 @@ class ConnectFourGUI(tk.Frame):
         self.player1_name = player1_name
         self.player2_name = player2_name
 
-
+        # Add timer-related attributes
+        self.total_seconds_p1 = 4 * 60
+        self.total_seconds_p2 = 4 * 60
+        self.elapsed_time_p1 = 0
+        self.elapsed_time_p2 = 0
+        self.timer_thread = threading.Thread(target=self.update_timer)
 
 
         adjusted_width = 900  # Adjust this value based on your preference
@@ -76,6 +83,50 @@ class ConnectFourGUI(tk.Frame):
         self.draw_board()
         self.bind_events()
         self.update_name_label()
+        # Start the timer thread
+        self.start_timer_thread()
+    def start_timer_thread(self):
+      if not self.timer_thread or not self.timer_thread.is_alive():
+        self.timer_thread = threading.Thread(target=self.update_timer)
+        self.timer_thread.start()
+
+
+    def update_timer(self):
+        while self.total_seconds_p1 > 0 and self.total_seconds_p2 > 0:
+            if not self.game_over:
+                minutes_p1, seconds_p1 = divmod(self.total_seconds_p1, 60)
+                minutes_p2, seconds_p2 = divmod(self.total_seconds_p2, 60)
+
+                time_str_p1 = f'{minutes_p1:02d}:{seconds_p1:02d}'
+                time_str_p2 = f'{minutes_p2:02d}:{seconds_p2:02d}'
+
+                self.timer_label.config(text=f'{time_str_p1} | {time_str_p2}')
+                self.master.update()
+                time.sleep(1)
+
+                if self.current_player == 1:
+                    self.total_seconds_p1 -= 1
+                    self.elapsed_time_p1 += 1
+                else:
+                    self.total_seconds_p2 -= 1
+                    self.elapsed_time_p2 += 1
+            else:
+                break
+
+        if not self.game_over:
+            self.game_over = True
+            winner = f'{self.get_player_name(3 - self.current_player)} wins!'
+            if self.check_draw():
+                winner = 'It\'s a draw!'
+            self.timer_label.config(text=winner, bg='yellow')
+            self.show_result()
+
+    
+    def show_result(self):
+        winner = f'{self.get_player_name(3 - self.current_player)} wins!'
+        if self.check_draw():
+            winner = 'It\'s a draw!'
+        self.timer_label.config(text=winner, bg='yellow')       
 
     def calculate_square_size(self):
         max_width = self.master.winfo_screenwidth()
@@ -147,6 +198,17 @@ class ConnectFourGUI(tk.Frame):
     def drop_piece(self, col):
         row = self.get_next_open_row(col)
         if row is not None:
+            if not self.timer_thread.is_alive():
+                self.start_timer_thread()
+
+            # If a move has been made before, resume timer from remaining time
+            if self.current_player == 1 and self.elapsed_time_p1 > 0:
+                self.total_seconds_p1 = max(self.total_seconds_p1 - self.elapsed_time_p1, 0)
+                self.elapsed_time_p1 = 0
+            elif self.current_player == 2 and self.elapsed_time_p2 > 0:
+                self.total_seconds_p2 = max(self.total_seconds_p2 - self.elapsed_time_p2, 0)
+                self.elapsed_time_p2 = 0
+
             self.board[row][col] = self.current_player
             self.draw_piece(row, col)
 
@@ -154,15 +216,13 @@ class ConnectFourGUI(tk.Frame):
                 self.game_over = True
                 winner = f'{self.get_player_name(self.current_player)} wins!'
                 self.timer_label.config(text=winner, bg='yellow')
-
             elif self.check_draw():
                 self.game_over = True
                 self.timer_label.config(text='It\'s a draw!', bg='yellow')
-
             else:
                 self.current_player = 3 - self.current_player  # Switch player
                 self.update_name_label()
-                self.timer_label.config(text='00:00', bg='lightgray')
+
 
     def get_next_open_row(self, col):
         for r in range(len(self.board) - 1, -1, -1):
@@ -206,14 +266,27 @@ class ConnectFourGUI(tk.Frame):
         return np.all(self.board != 0)
 
     def refresh(self):
+      # Stop the existing timer thread if it's running
+        if self.timer_thread and self.timer_thread.is_alive():
+          self.timer_thread.join()
+
+        # Reset timer-related attributes
+        self.total_seconds_p1 = 4 * 60
+        self.total_seconds_p2 = 4 * 60
+        self.elapsed_time_p1 = 0
+        self.elapsed_time_p2 = 0
+
+        # Reset game-related attributes
         self.board = np.zeros((self.row_count, self.column_count))
         self.game_over = False
         self.current_player = 1
         self.update_name_label()
-        self.timer_label.config(text='00:00', bg='lightgray')
         self.canvas.delete('all')
         self.calculate_square_size()
         self.draw_board()
+
+        # Start a new timer thread
+        self.start_timer_thread()
 
     def close_window(self):
         self.master.destroy()
