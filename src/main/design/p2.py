@@ -1,3 +1,4 @@
+
 import os
 import tkinter as tk
 import subprocess
@@ -59,3 +60,4 @@ dritare_emri.geometry(f"{gjeresia_dritare}x{lartesia_dritare}+{pozicion_x}+{pozi
 
 # Run the Tkinter GUI
 dritare_emri.mainloop()
+
