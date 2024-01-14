@@ -4,6 +4,8 @@ import tkinter as tk
 import sys
 from backend_logic import create_board, drop_piece, is_valid_location, get_next_open_row, winning_move, minimax, AI_PIECE, PLAYER_PIECE
 from backend_logic import is_terminal_node
+from p1 import create_confirmation_window
+
 import numpy as np
 
 ROW_COUNT = 5
@@ -12,8 +14,6 @@ SQUARE_SIZE = 80
 RADIUS = int(SQUARE_SIZE / 2)
 
 class ConnectFourGUI2:
-    def close_window(self):
-        self.master.destroy()
 
     def __init__(self, master, player_name, row_count, column_count):
         self.player_name = player_name if player_name else "Player 1"  # Ensure a default name if not provided
@@ -26,6 +26,7 @@ class ConnectFourGUI2:
 
         self.master = master
         self.master.title("Connect Four")
+        self.master.resizable(width=False, height=False)
         adjusted_width = 900  # Adjust this value based on your preference
         adjusted_height = 700  # Adjust this value based on your preference
         self.master.geometry(f"{adjusted_width}x{adjusted_height}")
@@ -177,6 +178,11 @@ class ConnectFourGUI2:
         self.canvas.update()
        
 
+    def close_window(self):
+        create_confirmation_window(self.close) 
+        
+    def close(self):
+        self.master.destroy()       
 
 
     def bind_events(self):
