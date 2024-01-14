@@ -1,4 +1,5 @@
 # MainFileIntegrated.py
+import time
 import tkinter as tk
 import sys
 from backend_logic import create_board, drop_piece, is_valid_location, get_next_open_row, winning_move, minimax, AI_PIECE, PLAYER_PIECE
@@ -18,6 +19,10 @@ class ConnectFourGUI2:
         self.player_name = player_name if player_name else "Player 1"  # Ensure a default name if not provided
         self.row_count = row_count
         self.column_count = column_count
+        self.timer_running = False
+        self.total_seconds = 240
+        self.winner = None
+        
 
         self.master = master
         self.master.title("Connect Four")
@@ -82,7 +87,31 @@ class ConnectFourGUI2:
         self.bind_events()
         self.update_name_label()
 
+    
+    def start_timer(self):
+        self.timer_running = True
+        self.update_timer()
 
+    def update_timer(self):
+      if self.total_seconds > 0 and self.timer_running:
+        minutes, seconds = divmod(self.total_seconds, 60)
+        time_str = f'{minutes:02d}:{seconds:02d}'
+        self.timer_label.config(text=time_str)
+        self.total_seconds -= 1
+        self.master.after(1000, self.update_timer)  # schedule the next update after 1000 milliseconds (1 second)
+      else:
+        self.timer_label.config(text='00:00')
+        if self.timer_running:  # Check if the timer was running
+            if self.winner == "AI":
+                    winner_text = "AI wins!"
+            else:
+                winner_text = f'{self.player_name} wins!'
+            self.timer_label.config(text=winner_text, bg='yellow')
+            self.show_result() 
+            self.timer_running = False
+
+    def stop_timer(self):
+        self.timer_running = False
 
     def calculate_square_size(self):
         max_width = self.master.winfo_screenwidth()
@@ -168,14 +197,19 @@ class ConnectFourGUI2:
             drop_piece(self.board, row, col, PLAYER_PIECE)
 
             if winning_move(self.board, PLAYER_PIECE):
-                self.display_winner("Player")
+                self.winner = "Player"
+                self.display_winner(self.player_name)
                 return
 
             if is_terminal_node(self.board):
+                self.winner = "Tie"
                 self.display_winner("Tie")
                 return
 
             self.draw_board()
+            self.stop_timer()
+            self.start_timer()
+            
 
         # AI's turn
         if not is_terminal_node(self.board):
@@ -187,29 +221,40 @@ class ConnectFourGUI2:
 
             if winning_move(self.board, AI_PIECE):
                 print("AI wins!!")
+                self.winner = "AI"
                 self.display_winner("AI")
                 return
             self.draw_board()
+            self.stop_timer()
+            self.start_timer()    
 
     def display_winner(self, winner):
         if winner == "Player":
+            self.stop_timer()
             self.open_win_window()
         elif winner == "AI":
+            self.stop_timer()
             self.open_loss_window()
         else:
+            self.stop_timer()
             self.connect_four_label.config(text=f'Connect Four - {winner} Tied!', fg='red')
-
+            
+        self.stop_timer()
     def open_win_window(self):
         import winner_box
+        self.stop_timer()
 
     def open_loss_window(self):
         import loser_box
+        self.stop_timer()
 
     def refresh(self):
         # Reset the game state
         self.board = create_board(self.row_count, self.column_count)
         self.draw_board()
         self.connect_four_label.config(text='Connect Four', fg='yellow')
+        self.stop_timer()
+        self.timer_label.config(text='00:00')
 
     def get_player_name(self):
         return self.player_name
@@ -220,11 +265,19 @@ class ConnectFourGUI2:
         else:
             truncated_name = self.get_truncated_player_name()
             self.name_label.config(text=truncated_name)
+            self.stop_timer()
 
     def get_truncated_player_name(self):
         current_player_name = self.get_player_name()
         return current_player_name[:6].ljust(6)
 
+    def refresh(self):
+        self.total_seconds = 240  # Reset the timer to the initial value
+        self.board = create_board(self.row_count, self.column_count)
+        self.draw_board()
+        self.connect_four_label.config(text='Connect Four', fg='yellow')
+        self.stop_timer()
+        self.timer_label.config(text='00:00')
 if __name__ == "__main__":
     player_name = sys.argv[1] if len(sys.argv) > 1 else "Player 1"
     row_count = 6
