@@ -7,6 +7,8 @@ import time
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from design.winner_box import winnerBox
+from design.p1 import create_confirmation_window
+
 
 class ConnectFourGUI(tk.Frame):
     def __init__(self, master, player1_name, player2_name, row_count, column_count):
@@ -300,7 +302,12 @@ class ConnectFourGUI(tk.Frame):
         self.start_timer_thread()
 
     def close_window(self):
+        create_confirmation_window(self.close)
+
+    def close(self):
         self.master.destroy()
+
+
 
     #Merr emrin e player
     def get_player_name(self, player):
