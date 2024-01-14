@@ -4,6 +4,10 @@ import sys
 import threading
 import time
 
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from design.winner_box import winnerBox
+
 class ConnectFourGUI(tk.Frame):
     def __init__(self, master, player1_name, player2_name, row_count, column_count):
         super().__init__(master)
@@ -142,7 +146,7 @@ class ConnectFourGUI(tk.Frame):
         max_square_size_smallmedium = 62
         max_square_size_large = 50
 
-        if self.row_count * self.column_count <= 31:  # percaktojme madhesine e tabeles madhe/vogel
+        if self.row_count * self.column_count <= 29:  # percaktojme madhesine e tabeles madhe/vogel
             self.square_size = min(square_size_width, square_size_height, max_square_size_extrasmall)
         elif self.row_count * self.column_count <= 43:  # percaktojme madhesine e tabeles madhe/vogel
             self.square_size = min(square_size_width, square_size_height, max_square_size_small)
@@ -216,12 +220,19 @@ class ConnectFourGUI(tk.Frame):
                 self.game_over = True
                 winner = f'{self.get_player_name(self.current_player)} wins!'
                 self.timer_label.config(text=winner, bg='yellow')
+                self.display_game_over_message(winner)
             elif self.check_draw():
                 self.game_over = True
                 self.timer_label.config(text='It\'s a draw!', bg='yellow')
+                self.display_game_over_message("Its a draw!")
             else:
                 self.current_player = 3 - self.current_player  # Switch player
                 self.update_name_label()
+
+
+    def display_game_over_message(self, message):
+        winnerBox(message, self.refresh, self.master)
+
 
 
     def get_next_open_row(self, col):
