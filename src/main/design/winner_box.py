@@ -1,79 +1,58 @@
 import tkinter as tk
-from tkinter import ttk
+import subprocess
 
-def close_window():
+def close_window(window):
     window.destroy()
 
-def option1_selected():
-    print("Return to home")
+def option_selected(option, refresh_function, window_to_destroy, main_game_window):
+    print(option)
+    if option == "Play Again":
+        refresh_function()
+        window_to_destroy.destroy()
+    elif option == "Home":
+        window_to_destroy.destroy()
+        main_game_window.destroy()
+        open_input_gui(main_game_window)
 
-def option2_selected():
-    print("Play the game again")
+def open_input_gui(main_game_window):
+    subprocess.run(["python", "input_gui.py"])
+    main_game_window.destroy()
 
 def create_rounded_button(parent, text, command):
-    # Create a canvas to draw the rounded rectangle
-    canvas = tk.Canvas(parent, width=100, height=30, highlightthickness=0)
+    button = tk.Button(parent, text=text, command=command)
+    button.config(width=15, height=2, bd=0, bg='red', fg='black', font=('Helvetica', 12))
+    return button
 
-    # Draw a rounded rectangle
-    rounded_rectangle = canvas.create_rounded_rectangle(0, 0, 100, 30, radius=8, fill='red', outline='gray')
+def winnerBox(message, refresh_function, main_game_window):
+    window = tk.Tk()
+    window.title("AlertBox")
+    window.geometry("406x264+{0}+{1}".format((window.winfo_screenwidth() - 406) // 2, (window.winfo_screenheight() - 264) // 2))
+    window.attributes('-toolwindow', True)
+    window.attributes('-topmost', 1)
 
-    # Add text to the button
-    text_id = canvas.create_text(50, 15, text=text, fill='black')
+    frame = tk.Frame(window)
 
-    # Bind the button functionality
-    canvas.bind('<Button-1>', lambda event: command())
+    def play_again():
+        option_selected("Play Again", refresh_function, window, main_game_window)
 
-    return canvas
+    button1 = create_rounded_button(frame, "Home", lambda: option_selected("Home", refresh_function, window, main_game_window))
+    button2 = create_rounded_button(frame, "Play Again", play_again)
 
-# Add a rounded rectangle drawing method to the Canvas widget
-def create_rounded_rectangle(self, x1, y1, x2, y2, radius, **kwargs):
-    points = [x1+radius, y1, x1+radius, y1, x2-radius, y1, x2-radius, y1, x2, y1, x2, y1+radius, x2, y1+radius, x2, y2-radius, x2, y2-radius, x2, y2, x2-radius, y2, x2-radius, y2, x1+radius, y2, x1+radius, y2, x1, y2, x1, y2-radius, x1, y2-radius, x1, y1+radius, x1, y1+radius, x1, y1]
+    frame.pack(side="bottom", pady=10)
+    button1.pack(side="left", padx=10)
+    button2.pack(side="right", padx=10)
 
-    return self.create_polygon(points, **kwargs, smooth=True)
+    tk.Label(window, text=message, font=("Helvetica", 20)).place(relx=0.5, rely=0.30, anchor="n")
 
-# Inject the create_rounded_rectangle method into the Canvas class
-tk.Canvas.create_rounded_rectangle = create_rounded_rectangle
+    window.mainloop()
 
-# Create the main window
-window = tk.Tk()
-window.title("AlertBox")
+if __name__ == "__main__":
+    def refresh_function():
+        print("Refresh function called")
 
-# Set the window size
-window_width = 406
-window_height = 264
+    main_game_window = tk.Tk()
+    main_game_window.title("Main Game Window")
+    main_game_window.geometry("800x600")
+    main_game_window.mainloop()
 
-# Set the window position to open in the center of the screen
-left_position = (window.winfo_screenwidth() - window_width) // 2
-top_position = (window.winfo_screenheight() - window_height) // 2
-window.geometry(f"{window_width}x{window_height}+{left_position}+{top_position}")
-
-
-# Remove the maximize and minimize buttons
-window.attributes('-toolwindow', True)
-window.attributes('-topmost', 1)
-
-# Create a frame to hold the buttons
-frame = tk.Frame(window)
-
-# Create two rounded buttons
-button1 = create_rounded_button(frame, "Home", option1_selected)
-button1.pack(side="left", padx=10)
-
-button2 = create_rounded_button(frame, "Play Again", option2_selected)
-button2.pack(side="right", padx=10)
-
-# Pack the frame at the bottom of the window
-frame.pack(side="bottom", pady=10)
-
-# Create two labels for displaying two lines of text in the middle
-text_line1 = "You won"
-text_line2 = "00:00"
-
-label1 = tk.Label(window, text=text_line1, font=("Helvetica", 16))
-label1.place(relx=0.5, rely=0.15, anchor="n")
-
-label2 = tk.Label(window, text=text_line2, font=("Helvetica", 16))
-label2.place(relx=0.5, rely=0.45, anchor="center")
-
-# Run the main loop
-window.mainloop()
+    winnerBox("You won", refresh_function, main_game_window)
