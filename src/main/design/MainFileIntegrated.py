@@ -1,6 +1,5 @@
+# MainFileIntegrated.py
 import tkinter as tk
-import numpy as np
-import time
 import sys
 from backend_logic import create_board, drop_piece, is_valid_location, get_next_open_row, winning_move, minimax, AI_PIECE, PLAYER_PIECE
 from backend_logic import is_terminal_node
@@ -42,18 +41,18 @@ class ConnectFourGUI2:
         self.close_button = tk.Button(button_frame, text='❌', command=self.close_window, font=('Helvetica', 12), width=5, bg='yellow', fg='black')
         self.close_button.pack(side='right', padx=20)
 
-        self.canvas = tk.Canvas(master, width=COLUMN_COUNT * SQUARE_SIZE, height=(ROW_COUNT + 1) * SQUARE_SIZE, bg='white')
+        self.canvas = tk.Canvas(master, width=column_count * SQUARE_SIZE, height=(row_count + 1) * SQUARE_SIZE, bg='white')
         self.canvas.grid(row=2, column=0, columnspan=2)
 
-        self.board = create_board()
+        self.board = create_board(row_count, column_count)  # Pass row_count and column_count to create_board
         self.draw_board()
         self.bind_events()
 
     def draw_board(self):
         self.canvas.delete("all")
 
-        for c in range(COLUMN_COUNT):
-            for r in range(ROW_COUNT):
+        for c in range(self.column_count):
+            for r in range(self.row_count):
                 # Drawing the rectangles (cells) with blue color
                 self.canvas.create_rectangle(c * SQUARE_SIZE, (r + 1) * SQUARE_SIZE, (c + 1) * SQUARE_SIZE,
                                              (r + 2) * SQUARE_SIZE, fill='blue')
@@ -61,20 +60,20 @@ class ConnectFourGUI2:
                 self.canvas.create_oval(c * SQUARE_SIZE, (r + 1) * SQUARE_SIZE, (c + 1) * SQUARE_SIZE,
                                         (r + 2) * SQUARE_SIZE, fill='white')
 
-        for c in range(COLUMN_COUNT):
-            for r in range(ROW_COUNT):
+        for c in range(self.column_count):
+            for r in range(self.row_count):
                 if self.board[r][c] == PLAYER_PIECE:
                     # Player's piece (red circle)
-                    self.canvas.create_oval(c * SQUARE_SIZE, (ROW_COUNT - r) * SQUARE_SIZE,
-                                            (c + 1) * SQUARE_SIZE, (ROW_COUNT - r + 1) * SQUARE_SIZE,
+                    self.canvas.create_oval(c * SQUARE_SIZE, (self.row_count - r) * SQUARE_SIZE,
+                                            (c + 1) * SQUARE_SIZE, (self.row_count - r + 1) * SQUARE_SIZE,
                                             fill='red')
                 elif self.board[r][c] == AI_PIECE:
                     # AI's piece (yellow circle)
-                    self.canvas.create_oval(c * SQUARE_SIZE, (ROW_COUNT - r) * SQUARE_SIZE,
-                                            (c + 1) * SQUARE_SIZE, (ROW_COUNT - r + 1) * SQUARE_SIZE,
+                    self.canvas.create_oval(c * SQUARE_SIZE, (self.row_count - r) * SQUARE_SIZE,
+                                            (c + 1) * SQUARE_SIZE, (self.row_count - r + 1) * SQUARE_SIZE,
                                             fill='yellow')
 
-        x = (COLUMN_COUNT // 2) * SQUARE_SIZE
+        x = (self.column_count // 2) * SQUARE_SIZE
         y = SQUARE_SIZE * 0.5
         self.ball_id = self.canvas.create_oval(x - RADIUS, y - RADIUS, x + RADIUS, y + RADIUS, fill='red')
         self.canvas.update()
@@ -134,12 +133,9 @@ class ConnectFourGUI2:
     def open_loss_window(self):
         import loser_box
 
-    def close_window(self):
-        self.master.destroy()
-
     def refresh(self):
         # Reset the game state
-        self.board = create_board()
+        self.board = create_board(self.row_count, self.column_count)
         self.draw_board()
         self.connect_four_label.config(text='Connect Four', fg='yellow')
 
@@ -152,7 +148,6 @@ class ConnectFourGUI2:
         else:
             truncated_name = self.get_truncated_player_name()
             self.name_label.config(text=truncated_name)
-
 
     def get_truncated_player_name(self):
         current_player_name = self.get_player_name()

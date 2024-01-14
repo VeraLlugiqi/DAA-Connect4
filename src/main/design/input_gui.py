@@ -140,6 +140,10 @@ class ConnectFourSetup:
         player_name = player
         grid_size = self.grid_size_var.get()
 
+        if "x" not in grid_size:
+            print("Please choose a valid grid size.")
+            return
+
         row_count, column_count = map(int, grid_size.split("x"))
 
         print(f"Grid Size: {grid_size}")
