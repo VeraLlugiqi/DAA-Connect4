@@ -57,26 +57,31 @@ class ConnectFourGUI2:
                 self.canvas.create_rectangle(c * SQUARE_SIZE, (r + 1) * SQUARE_SIZE, (c + 1) * SQUARE_SIZE,
                                              (r + 2) * SQUARE_SIZE, fill='blue')
                 # Drawing the circles (pieces) with white color
-                self.canvas.create_oval(c * SQUARE_SIZE, (r + 1) * SQUARE_SIZE, (c + 1) * SQUARE_SIZE,
-                                        (r + 2) * SQUARE_SIZE, fill='white')
+                self.canvas.create_oval(c * SQUARE_SIZE, r * SQUARE_SIZE + SQUARE_SIZE, (c + 1) * SQUARE_SIZE,
+                                        (r + 1) * SQUARE_SIZE + SQUARE_SIZE, fill='white')
 
         for c in range(self.column_count):
-            for r in range(self.row_count):
+            for r in range(self.row_count-1, -1, -1):
                 if self.board[r][c] == PLAYER_PIECE:
                     # Player's piece (red circle)
-                    self.canvas.create_oval(c * SQUARE_SIZE, (self.row_count - r) * SQUARE_SIZE,
-                                            (c + 1) * SQUARE_SIZE, (self.row_count - r + 1) * SQUARE_SIZE,
+                    self.canvas.create_oval(c * SQUARE_SIZE, (r + 1) * SQUARE_SIZE,
+                                            (c + 1) * SQUARE_SIZE, (r + 2) * SQUARE_SIZE,
                                             fill='red')
                 elif self.board[r][c] == AI_PIECE:
                     # AI's piece (yellow circle)
-                    self.canvas.create_oval(c * SQUARE_SIZE, (self.row_count - r) * SQUARE_SIZE,
-                                            (c + 1) * SQUARE_SIZE, (self.row_count - r + 1) * SQUARE_SIZE,
+                    self.canvas.create_oval(c * SQUARE_SIZE, (r + 1) * SQUARE_SIZE,
+                                            (c + 1) * SQUARE_SIZE, (r + 2) * SQUARE_SIZE,
                                             fill='yellow')
 
         x = (self.column_count // 2) * SQUARE_SIZE
-        y = SQUARE_SIZE * 0.5
+        y = SQUARE_SIZE * 0.5 - SQUARE_SIZE  # Adjusted to be one row above the table
         self.ball_id = self.canvas.create_oval(x - RADIUS, y - RADIUS, x + RADIUS, y + RADIUS, fill='red')
         self.canvas.update()
+
+
+
+
+
 
     def bind_events(self):
         self.canvas.bind('<Motion>', self.on_mouse_motion)
