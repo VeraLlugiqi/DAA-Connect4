@@ -11,12 +11,12 @@ from design.winner_box import winnerBox
 BLUE = (0, 0, 255)
 RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
-BLACK = (0, 0, 0)
+BLACK = (255, 255, 255)
 
 class ConnectFour:
-    def __init__(self):
-        self.ROW_COUNT = 5
-        self.COLUMN_COUNT = 4
+    def __init__(self, row, column):
+        self.ROW_COUNT = row
+        self.COLUMN_COUNT = column
         self.PLAYER = 0
         self.AI = 1
         self.EMPTY = 0
@@ -365,7 +365,7 @@ class ConnectFour:
 
 
 if __name__ == "__main__":
-    game = ConnectFour()
+    game = ConnectFour(6, 7)
     game.play_game()
 
 
