@@ -7,6 +7,8 @@ from player_vs_ai_zana01 import ConnectFour
 class ConnectFourGUI(tk.Frame):
     def __init__(self, master, player1_name, player2_name, row_count, column_count):
         super().__init__(master)
+        self.row_count = row_count
+        self.column_count = column_count
         self.master.title("Connect Four")
         self.master.configure(bg="white")
         self.master.resizable(width=False, height=False)
@@ -60,17 +62,14 @@ class ConnectFourGUI(tk.Frame):
         self.draw_board()    
 
     def refresh(self):
-      # Stop the existing timer thread if it's running
         if self.timer_thread and self.timer_thread.is_alive():
           self.timer_thread.join()
 
-        # Reset timer-related attributes
         self.total_seconds_p1 = 4 * 60
         self.total_seconds_p2 = 4 * 60
         self.elapsed_time_p1 = 0
         self.elapsed_time_p2 = 0
 
-        # Reset game-related attributes
         self.board = np.zeros((self.row_count, self.column_count))
         self.game_over = False
         self.current_player = 1
@@ -89,12 +88,8 @@ class ConnectFourGUI(tk.Frame):
         self.master.destroy()
 
     def draw_game(self, board):
-        self.canvas.delete(self.canvas_id)  # Clear previous drawings
+        self.canvas.delete(self.canvas_id)  
 
-        # Your drawing logic for the Connect 4 game goes here
-        # Use the board parameter to draw the current state of the game
-
-        # Example: Display the content of the board in the canvas
         game_text = '\n'.join([' '.join(map(str, row)) for row in board])
         self.canvas.itemconfig(self.canvas_id, text=game_text)
 
@@ -102,6 +97,5 @@ class ConnectFourGUI(tk.Frame):
 if __name__ == "__main__":           
     root = tk.Tk()
     gui = ConnectFourGUI(root, "", "", 1, 2)
-    game = ConnectFour(gui, 1, 2)  # Pass the ConnectFourGUI instance to ConnectFour
-    gui.draw_game(game.board)  # Initial drawing
+    #game = ConnectFour(gui, 1, 2)  
     root.mainloop()

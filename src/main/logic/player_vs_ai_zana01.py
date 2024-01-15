@@ -354,7 +354,7 @@ class ConnectFour:
         }
 
         # Default values in case the (row, col) pair is not in the dictionary
-        default_values = (0, 0, 0, 0)
+        default_values = (3, 3, 3, 3, 3, 3)
 
         # Use get method to retrieve values based on (row, col) pair
         horizontal, vertical, negative_diagonal_col, negative_diagonal_row, positive_diagonal_col, positive_diagonal_row = switch_dict.get((row, col), default_values)
