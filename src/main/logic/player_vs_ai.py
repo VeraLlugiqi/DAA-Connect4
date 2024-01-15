@@ -97,20 +97,17 @@ def score_position(board, piece):
 		for c in range(COLUMN_COUNT-3):
 			window = row_array[c:c+WINDOW_LENGTH]
 			score += evaluate_window(window, piece)
-
 	## Score Vertical
 	for c in range(COLUMN_COUNT):
 		col_array = [int(i) for i in list(board[:,c])]
 		for r in range(ROW_COUNT-3):
 			window = col_array[r:r+WINDOW_LENGTH]
 			score += evaluate_window(window, piece)
-
 	## Score posiive sloped diagonal
 	for r in range(ROW_COUNT-3):
 		for c in range(COLUMN_COUNT-3):
 			window = [board[r+i][c+i] for i in range(WINDOW_LENGTH)]
 			score += evaluate_window(window, piece)
-
 	for r in range(ROW_COUNT-3):
 		for c in range(COLUMN_COUNT-3):
 			window = [board[r+3-i][c+i] for i in range(WINDOW_LENGTH)]
@@ -186,7 +183,6 @@ def pick_best_move(board, piece):
 		if score > best_score:
 			best_score = score
 			best_col = col
-
 	return best_col
 
 def draw_board(board):
@@ -264,7 +260,7 @@ while not game_over:
 					draw_board(board)
 
 
-	# # Ask for Player 2 Input
+	# # Ask for AI Input
 	if turn == AI and not game_over:				
 
 		#col = random.randint(0, COLUMN_COUNT-1)
