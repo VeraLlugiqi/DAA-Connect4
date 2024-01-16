@@ -4,9 +4,10 @@ import pygame
 import sys
 import os
 import math
+import tkinter as tk
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from design.winner_box import winnerBox
+from design.winner_box import winnerBox_ai
 
 BLUE = (0, 0, 255)
 RED = (255, 0, 0)
@@ -14,7 +15,9 @@ YELLOW = (255, 255, 0)
 BLACK = (255, 255, 255)
 
 class ConnectFour:
-    def __init__(self, row, column):
+    def __init__(self, row, column, window):
+        self.window = window
+        self.main_game_window = None
         self.ROW_COUNT = row
         self.COLUMN_COUNT = column
         self.PLAYER = 0
@@ -297,7 +300,8 @@ class ConnectFour:
 
                     if self.winning_move(self.board, self.AI_PIECE):
                         self.draw_board(self.board)
-                        winnerBox("AI WINS", self.refresh_function(), self.screen)
+                        self.display_game_over_message("AI WINS")
+                        #winnerBox("AI WINS", self.refresh_function(), self.screen)
                         #label = self.myfont.render("Player 2 wins!!", 1, YELLOW)
                         #self.screen.blit(label, (40,10))
                         self.game_over = True
@@ -314,7 +318,9 @@ class ConnectFour:
                 self.game_over = True 
 
             if self.game_over:
-                pygame.time.wait(1000)
+                pygame.time.wait(3000)
+
+            
 
     def is_draw(self, board):
         i = 0
@@ -355,6 +361,18 @@ class ConnectFour:
     def refresh_function(self):
         print("Refresh function called")
 
+
+    def refresh(self):
+        self.board = np.zeros((self.ROW_COUNT, self.COLUMN_COUNT))
+        self.game_over = False
+        self.calculate_square_size(self.screen)
+        self.draw_board(self.board)
+        pygame.display.update()  # Add this line to update the pygame display
+        self.play_game()
+
+
+    def display_game_over_message(self, message):
+        winnerBox_ai(message, self.window)
 
 
     def get_winning_position_based_on_table(self, row, col):
