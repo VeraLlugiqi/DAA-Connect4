@@ -75,6 +75,7 @@ class ConnectFour:
 
     def winning_move(self, board, piece):
 
+
         horizontal, vertical, negative_diagonal_col, negative_diagonal_row, positive_diagonal_col, positive_diagonal_row = self.get_winning_position_based_on_table(self.ROW_COUNT, self.COLUMN_COUNT)
 
         # Check horizontal locations for win
@@ -270,7 +271,7 @@ class ConnectFour:
 
                             if self.winning_move(self.board, self.PLAYER_PIECE):
                                 self.draw_board(self.board)
-                                winnerBox("YOU WINS", self.refresh_function(), self.screen)
+                                winnerBox("YOU WIN", self.refresh_function(), self.screen)
                                 #label = self.myfont.render("Player 1 wins!!", 1, RED)
                                 #self.screen.blit(label, (40,10))
                                 self.game_over = True
@@ -306,9 +307,21 @@ class ConnectFour:
 
                     self.turn += 1
                     self.turn = self.turn % 2
+ 
+            if self.is_draw(self.board):
+                self.draw_board(self.board)
+                winnerBox("ITS A DRAW", self.refresh_function(), self.screen)
+                self.game_over = True 
 
             if self.game_over:
-                pygame.time.wait(3000)
+                pygame.time.wait(1000)
+
+    def is_draw(self, board):
+        i = 0
+        for c in range(self.COLUMN_COUNT):
+            if board[self.ROW_COUNT-1][c] != 0:
+                i+=1
+        return i == self.COLUMN_COUNT
 
     def calculate_square_size(self, screen):
         max_width = screen.get_width()
@@ -365,7 +378,7 @@ class ConnectFour:
 
 
 if __name__ == "__main__":
-    game = ConnectFour(6, 7)
+    game = ConnectFour(5, 4)
     game.play_game()
 
 
