@@ -15,8 +15,7 @@ YELLOW = (255, 255, 0)
 BLACK = (255, 255, 255)
 
 class ConnectFour:
-    def __init__(self, row, column, window):
-        self.window = window
+    def __init__(self, row, column):
         self.main_game_window = None
         self.ROW_COUNT = row
         self.COLUMN_COUNT = column
@@ -29,7 +28,7 @@ class ConnectFour:
         self.board = np.zeros((self.ROW_COUNT, self.COLUMN_COUNT))
         self.game_over = False
         self.turn = random.randint(self.PLAYER, self.AI)
-        os.environ['SDL_VIDEO_WINDOW_POS'] = '200,100'
+        os.environ['SDL_VIDEO_WINDOW_POS'] = '500,75'
         pygame.init()
         self.myfont = pygame.font.SysFont("Helvetica", 75)
 
@@ -235,7 +234,7 @@ class ConnectFour:
             for r in range(self.ROW_COUNT):
                 pygame.draw.rect(self.screen, BLUE, (c*self.SQUARESIZE, r*self.SQUARESIZE+self.SQUARESIZE, self.SQUARESIZE, self.SQUARESIZE))
                 pygame.draw.circle(self.screen, BLACK, (int(c*self.SQUARESIZE+self.SQUARESIZE/2), int(r*self.SQUARESIZE+self.SQUARESIZE+self.SQUARESIZE/2)), self.RADIUS)
-        
+            
         for c in range(self.COLUMN_COUNT):
             for r in range(self.ROW_COUNT):      
                 if board[r][c] == self.PLAYER_PIECE:
@@ -305,6 +304,7 @@ class ConnectFour:
                         #label = self.myfont.render("Player 2 wins!!", 1, YELLOW)
                         #self.screen.blit(label, (40,10))
                         self.game_over = True
+                        self.i = 1
 
                     self.print_board(self.board)
                     self.draw_board(self.board)
@@ -339,9 +339,9 @@ class ConnectFour:
         # i percaktojna dimensionet sa me u kon ni square nqs tabela ma e vogel / madhe
         max_square_size_extrasmall = 90
         max_square_size_small = 78
-        max_square_size_medium = 62
-        max_square_size_smallmedium = 62
-        max_square_size_large = 50
+        max_square_size_medium = 68
+        max_square_size_smallmedium = 68
+        max_square_size_large = 60
 
         if self.ROW_COUNT * self.COLUMN_COUNT <= 29:  # percaktojme madhesine e tabeles madhe/vogel
             SQUARESIZE = min(square_size_width, square_size_height, max_square_size_extrasmall)
@@ -372,7 +372,7 @@ class ConnectFour:
 
 
     def display_game_over_message(self, message):
-        winnerBox_ai(message, self.window)
+        winnerBox_ai(message, "")
 
 
     def get_winning_position_based_on_table(self, row, col):

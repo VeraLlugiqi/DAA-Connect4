@@ -5,7 +5,7 @@ import os
 import sys
 sys.path.append("..")
 from logic.player_vs_player import ConnectFourGUI
-from logic.player_vs_ai_zana01 import ConnectFour
+from logic.player_vs_ai_final import ConnectFour
 from MainFileIntegrated import ConnectFourGUI2
 
 class ConnectFourSetup:
@@ -122,7 +122,7 @@ class ConnectFourSetup:
         #root = tk.Tk()
         #game_instance = ConnectFourGUI2(root, player_name, row_count, column_count)
         #root.mainloop()
-        game_instance = ConnectFour(row_count, column_count, self.window)
+        game_instance = ConnectFour(row_count, column_count)
         game_instance.play_game()
 
 

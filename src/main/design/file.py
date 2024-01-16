@@ -1,1 +1,0 @@
-print("zana ma e mira")
