@@ -28,30 +28,30 @@ To improve efficiency, alpha-beta pruning is applied. This technique reduces the
 
 
 
-Photo 6. An example of AI winning.
-# Milestones:
+Photo 1. An example of AI winning.
+# Developement:
 
 
 ![Screenshot (701)](https://github.com/VeraLlugiqi/DAA-Connect4/assets/115923848/ccfd594d-cfbe-4f4d-baf5-bcb3116e90f5)
 
-Photo 1. The division of tasks in different epics
+Photo 2. The division of tasks in different epics
 
 ![Screenshot (700)](https://github.com/VeraLlugiqi/DAA-Connect4/assets/115923848/121f2354-3401-4100-85d7-91f1b7404d12)
 
-Photo 2. Branch protection (master and developer)
+Photo 3. Branch protection (master and developer)
 
 
 ![Screenshot (702)](https://github.com/VeraLlugiqi/DAA-Connect4/assets/115923848/bd2aea25-be3e-404b-9db6-320f78576592)
-Photo 3. The activity of the students.
+Photo 4. The activity of the students.
 
 
 ![Screenshot (689)](https://github.com/VeraLlugiqi/DAA-Connect4/assets/115923848/172edaf6-6e81-4f9d-9060-2bdade5756a5)
 
-Photo 4. The backlog of a sprint.
+Photo 5. The backlog of a sprint.
 
 
 ![Screenshot (705)](https://github.com/VeraLlugiqi/DAA-Connect4/assets/115923848/175dab01-b9db-4bc3-9f30-0330dfde476f)
-Photo 5. A sprint view in different statuses.
+Photo 6. A sprint view in different statuses.
 
 
 
