@@ -5,7 +5,8 @@ import os
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from logic.player_vs_player import ConnectFourGUI
-from MainFileIntegrated import ConnectFourGUI2
+from logic.player_vs_ai import ConnectFourGUI2
+
 
 class ConnectFourSetup:
     def __init__(self):

@@ -30,10 +30,10 @@ def create_rounded_button(parent, text, command):
 def winnerBox(message, refresh_function, main_game_window):
     window = tk.Tk()
     window.title("AlertBox")
-    window.geometry("406x264+{0}+{1}".format((window.winfo_screenwidth() - 406) // 2, (window.winfo_screenheight() - 264) // 2))
+    window.geometry("406x264+{0}+{1}".format((window.winfo_screenwidth() - 1000 - 50) // 2, (window.winfo_screenheight() - 264) // 2))
     window.attributes('-toolwindow', True)
     window.attributes('-topmost', 1)
-
+    window.grab_set_global()
     frame = tk.Frame(window)
 
     def play_again():

@@ -7,7 +7,7 @@ import time
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from design.winner_box import winnerBox
-from design.p1 import create_confirmation_window
+from design.close_box import create_confirmation_window
 
 
 class ConnectFourGUI(tk.Frame):

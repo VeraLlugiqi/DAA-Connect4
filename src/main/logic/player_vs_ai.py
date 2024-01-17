@@ -3,9 +3,11 @@ import tkinter as tk
 import threading
 import time
 import sys
-from backend_logic import create_board, drop_piece, is_valid_location, get_next_open_row, winning_move, minimax, AI_PIECE, PLAYER_PIECE
-from backend_logic import is_terminal_node
-from p1 import create_confirmation_window
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from logic.backend_logic import create_board, drop_piece, is_valid_location, get_next_open_row, winning_move, minimax, AI_PIECE, PLAYER_PIECE
+from logic.backend_logic import is_terminal_node
+from design.close_box import create_confirmation_window
 
 ROW_COUNT = 5
 COLUMN_COUNT = 6
@@ -227,10 +229,10 @@ class ConnectFourGUI2:
             self.draw_board()
             #kushti per barazim
             i=0
-            for r in range(self.row_count):
-                if self.board[r][self.column_count-1] != 0:
+            for c in range(self.column_count):
+                if self.board[0][c] != 0:
                     i+=1
-            if i == self.row_count:
+            if i == self.column_count:
                 self.open_draw_window()
                    
 
@@ -245,17 +247,17 @@ class ConnectFourGUI2:
     def open_win_window(self):
         self.stop_timer_event.set()
         import winner_box
-        winner_box.winnerBox("You won!", self.refresh, self.master)
+        winner_box.winnerBox(f"{self.player_name} won!!", self.refresh, self.master)
 
     def open_loss_window(self):
         self.stop_timer_event.set()
-        import loser_box
-        loser_box.loserBox("You lost!", self.refresh, self.master)
+        import winner_box
+        winner_box.winnerBox(f"{self.player_name} lost :(", self.refresh, self.master)
 
     def open_draw_window(self):
         self.stop_timer_event.set()
-        import loser_box
-        loser_box.loserBox("IT'S A TIE!", self.refresh, self.master)
+        import winner_box
+        winner_box.winnerBox("IT'S A TIE!", self.refresh, self.master)
 
     def refresh(self):
       
