@@ -28,38 +28,38 @@ def create_rounded_rectangle(self, x1, y1, x2, y2, radius, **kwargs):
 
 tk.Canvas.create_rounded_rectangle = create_rounded_rectangle
 
-window = tk.Tk()
-window.title("AlertBox")
+def loserBox(message, refresh_function, main_game_window):
+    window = tk.Tk()
+    window.title("AlertBox")
 
-window.attributes('-toolwindow', True)
-window.attributes('-topmost', 1)
+    window.attributes('-toolwindow', True)
+    window.attributes('-topmost', 1)
 
-window_width = 406
-window_height = 264
+    window_width = 406
+    window_height = 264
 
-screen_width = window.winfo_screenwidth()
-screen_height = window.winfo_screenheight()
+    screen_width = window.winfo_screenwidth()
+    screen_height = window.winfo_screenheight()
 
-left_position = (screen_width - window_width) // 2
-top_position = (screen_height - window_height) // 2
-window.geometry(f"{window_width}x{window_height}+{left_position}+{top_position}")
+    left_position = (screen_width - window_width) // 2
+    top_position = (screen_height - window_height) // 2
+    window.geometry(f"{window_width}x{window_height}+{left_position}+{top_position}")
 
-frame = tk.Frame(window)
+    frame = tk.Frame(window)
 
-button1 = create_rounded_button(frame, "Home", option1_selected)
-button1.pack(side="left", padx=10)
+    button1 = create_rounded_button(frame, "Home", option1_selected)
+    button1.pack(side="left", padx=10)
 
-button2 = create_rounded_button(frame, "Play Again", option2_selected)
-button2.pack(side="right", padx=10)
+    button2 = create_rounded_button(frame, "Play Again", option2_selected)
+    button2.pack(side="right", padx=10)
 
-frame.pack(side="bottom", pady=10)
+    frame.pack(side="bottom", pady=10)
 
-text_line1 = "You lost"
+    text_line1 = "You lost"
 
-label1 = tk.Label(window, text=text_line1, font=("Helvetica", 16))
-label1.place(relx=0.5, rely=0.15, anchor="n")
+    label1 = tk.Label(window, text=text_line1, font=("Helvetica", 16))
+    label1.place(relx=0.5, rely=0.15, anchor="n")
 
-label2 = tk.Label(window, text=text_line2, font=("Helvetica", 16))
-label2.place(relx=0.5, rely=0.45, anchor="center")
+    
 
-window.mainloop()
+    window.mainloop()

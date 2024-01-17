@@ -51,7 +51,8 @@ def is_terminal_node(board):
 def get_valid_locations(board):
     valid_locations = []
     for col in range(len(board[0])):
-        if is_valid_location(board, col):
+        row = get_next_open_row(board, col)
+        if row is not None:
             valid_locations.append(col)
     return valid_locations
 
