@@ -4,6 +4,10 @@ import subprocess
 def close_window(window):
     window.destroy()
 
+def on_closing(window, master):
+    master.destroy()  
+    window.destroy()
+
 def option_selected(option, refresh_function, window_to_destroy, main_game_window):
     print(option)
     if option == "Play Again":
@@ -16,7 +20,7 @@ def option_selected(option, refresh_function, window_to_destroy, main_game_windo
 
 def open_input_gui(main_game_window):
     subprocess.run(["python", "input_gui.py"])
-    main_game_window.destroy()
+    # main_game_window.destroy()
 
 def create_rounded_button(parent, text, command):
     button = tk.Button(parent, text=text, command=command)
@@ -43,6 +47,7 @@ def winnerBox(message, refresh_function, main_game_window):
     button2.pack(side="right", padx=10)
 
     tk.Label(window, text=message, font=("Helvetica", 20)).place(relx=0.5, rely=0.30, anchor="n")
+    window.protocol("WM_DELETE_WINDOW", lambda: on_closing(window, main_game_window))
 
     window.mainloop()
 

@@ -1,65 +1,65 @@
 import tkinter as tk
-from tkinter import ttk
+import subprocess
 
-def close_window():
+def close_window(window):
     window.destroy()
 
-def option1_selected():
-    print("Return to home")
+def on_closing(window, master):
+    master.destroy()  
+    window.destroy()
 
-def option2_selected():
-    print("Play the game again")
+
+def option_selected(option, refresh_function, window_to_destroy, main_game_window):
+    print(option)
+    if option == "Play Again":
+        refresh_function()
+        window_to_destroy.destroy()
+    elif option == "Home":
+        window_to_destroy.destroy()
+        main_game_window.destroy()
+        open_input_gui(main_game_window)
+
+
+def open_input_gui(main_game_window):
+    subprocess.run(["python", "input_gui.py"])
+    # main_game_window.destroy()
 
 def create_rounded_button(parent, text, command):
-    canvas = tk.Canvas(parent, width=100, height=30, highlightthickness=0)
+    button = tk.Button(parent, text=text, command=command)
+    button.config(width=15, height=2, bd=0, bg='red', fg='black', font=('Helvetica', 12))
+    return button
 
-    rounded_rectangle = canvas.create_rounded_rectangle(0, 0, 100, 30, radius=8, fill='red', outline='gray')
+def loserBox(message, refresh_function, main_game_window):
+    window = tk.Tk()
+    window.title("AlertBox")
+    window.geometry("406x264+{0}+{1}".format((window.winfo_screenwidth() - 406) // 2, (window.winfo_screenheight() - 264) // 2))
+    window.attributes('-toolwindow', True)
+    window.attributes('-topmost', 1)
 
-    text_id = canvas.create_text(50, 15, text=text, fill='black')
+    frame = tk.Frame(window)
 
-    canvas.bind('<Button-1>', lambda event: command())
+    def play_again():
+        option_selected("Play Again", refresh_function, window, main_game_window)
 
-    return canvas
+    button1 = create_rounded_button(frame, "Home", lambda: option_selected("Home", refresh_function, window, main_game_window))
+    button2 = create_rounded_button(frame, "Play Again", play_again)
 
-def create_rounded_rectangle(self, x1, y1, x2, y2, radius, **kwargs):
-    points = [x1+radius, y1, x1+radius, y1, x2-radius, y1, x2-radius, y1, x2, y1, x2, y1+radius, x2, y1+radius, x2, y2-radius, x2, y2-radius, x2, y2, x2-radius, y2, x2-radius, y2, x1+radius, y2, x1+radius, y2, x1, y2, x1, y2-radius, x1, y2-radius, x1, y1+radius, x1, y1+radius, x1, y1]
+    frame.pack(side="bottom", pady=10)
+    button1.pack(side="left", padx=10)
+    button2.pack(side="right", padx=10)
 
-    return self.create_polygon(points, **kwargs, smooth=True)
+    tk.Label(window, text=message, font=("Helvetica", 20)).place(relx=0.5, rely=0.30, anchor="n")
+    window.protocol("WM_DELETE_WINDOW", lambda: on_closing(window, main_game_window))
 
-tk.Canvas.create_rounded_rectangle = create_rounded_rectangle
+    window.mainloop()
 
-window = tk.Tk()
-window.title("AlertBox")
+if __name__ == "__main__":
+    def refresh_function():
+        print("Refresh function called")
 
-window.attributes('-toolwindow', True)
-window.attributes('-topmost', 1)
+    main_game_window = tk.Tk()
+    main_game_window.title("Main Game Window")
+    main_game_window.geometry("800x600")
+    main_game_window.mainloop()
 
-window_width = 406
-window_height = 264
-
-screen_width = window.winfo_screenwidth()
-screen_height = window.winfo_screenheight()
-
-left_position = (screen_width - window_width) // 2
-top_position = (screen_height - window_height) // 2
-window.geometry(f"{window_width}x{window_height}+{left_position}+{top_position}")
-
-frame = tk.Frame(window)
-
-button1 = create_rounded_button(frame, "Home", option1_selected)
-button1.pack(side="left", padx=10)
-
-button2 = create_rounded_button(frame, "Play Again", option2_selected)
-button2.pack(side="right", padx=10)
-
-frame.pack(side="bottom", pady=10)
-
-text_line1 = "You lost"
-
-label1 = tk.Label(window, text=text_line1, font=("Helvetica", 16))
-label1.place(relx=0.5, rely=0.15, anchor="n")
-
-label2 = tk.Label(window, text=text_line2, font=("Helvetica", 16))
-label2.place(relx=0.5, rely=0.45, anchor="center")
-
-window.mainloop()
+    winnerBox("You won", refresh_function, main_game_window)
