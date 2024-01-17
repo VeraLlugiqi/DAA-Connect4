@@ -62,6 +62,7 @@ Photo 7. Linked pull requests.
 
 # User Manuals:
 To play the game from local host one can clone it directly from this gihub, <br> 
+	You should have python version 3 installed! <br> 
 	Execute the input_gui.py file, <br> 
 	Pick the table size and mode(player vs player or player vs AI) <br> 
 	The game will continue until one of the players wins or runs out of time, <br> 
