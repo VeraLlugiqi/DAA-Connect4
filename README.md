@@ -31,7 +31,6 @@
 	Summarize the outcomes of the project.
 
 # Project Team
-	Team Members
 	Anjeza Sfishta
 	Leonite Gllareva
 	Medina Shabani
