@@ -18,20 +18,19 @@ class ConnectFourGUI2:
         self.master.destroy()  
 
     def __init__(self, master, player_name, row_count, column_count):
-        self.player_name = player_name if player_name else "Player 1"  # Ensure a default name if not provided
+        self.player_name = player_name if player_name else "Player 1"  
         self.row_count = row_count
         self.column_count = column_count
         self.start_time = None
         self.timer_thread = None
         self.master = master
         self.master.title("Connect Four")
-        adjusted_width = 900  # Adjust this value based on your preference
-        adjusted_height = 700  # Adjust this value based on your preference
+        adjusted_width = 900  
+        adjusted_height = 700  
         self.master.geometry(f"{adjusted_width}x{adjusted_height}")
         self.master.configure(bg="white")
 
-        # Center the window on the screen
-        extra_right_margin = 200  # Adjust this value based on your preference
+        extra_right_margin = 200  
         extra_top_margin = 50
         self.master.geometry("+%d+%d" % ((self.master.winfo_screenwidth() - adjusted_width + extra_right_margin) // 2,
                                (self.master.winfo_screenheight() - adjusted_height - extra_top_margin) // 2))
@@ -71,7 +70,7 @@ class ConnectFourGUI2:
         self.radius = 0
         self.calculate_square_size()
 
-        self.board = create_board(row_count, column_count)  # Pass row_count and column_count to create_board
+        self.board = create_board(row_count, column_count) 
         self.draw_board()
         self.bind_events()
 
@@ -113,7 +112,6 @@ class ConnectFourGUI2:
         self.game_in_progress = False
         self.end_time = None 
     def open_result_window(self):
-        # Set the stop event to signal the timer thread to stop
         self.stop_timer_event.set()            
     def update_timer_label(self):
         if self.start_time:
@@ -122,7 +120,6 @@ class ConnectFourGUI2:
             time_str = f'{minutes:02d}:{seconds:02d}'
             self.timer_label.config(text=time_str)
 
-            # Schedule the next update after 1000 milliseconds (1 second)
             self.master.after(1000, self.update_timer_label)   
 
     def calculate_square_size(self):
@@ -162,22 +159,18 @@ class ConnectFourGUI2:
 
         for c in range(self.column_count):
             for r in range(self.row_count):
-                # Drawing the rectangles (cells) with blue color
                 self.canvas.create_rectangle(c * self.square_size, (r + 1) * self.square_size, (c + 1) * self.square_size,
                                              (r + 2) * self.square_size, fill='blue', outline='blue')
-                # Drawing the circles (pieces) with white color
                 self.canvas.create_oval(c * self.square_size, r * self.square_size + self.square_size, (c + 1) * self.square_size,
                                         (r + 1) * self.square_size + self.square_size, fill='white')
 
         for c in range(self.column_count):
             for r in range(self.row_count-1, -1, -1):
                 if self.board[r][c] == PLAYER_PIECE:
-                    # Player's piece (red circle)
                     self.canvas.create_oval(c * self.square_size, (r + 1) * self.square_size,
                                             (c + 1) * self.square_size, (r + 2) * self.square_size,
                                             fill='red')
                 elif self.board[r][c] == AI_PIECE:
-                    # AI's piece (yellow circle)
                     self.canvas.create_oval(c * self.square_size, (r + 1) * self.square_size,
                                             (c + 1) * self.square_size, (r + 2) * self.square_size,
                                             fill='yellow')
@@ -186,10 +179,6 @@ class ConnectFourGUI2:
         y = self.square_size * 0.5 - self.square_size  # Adjusted to be one row above the table
         self.ball_id = self.canvas.create_oval(x - self.radius, y - self.radius, x + self.radius, y + self.radius, fill='red')
         self.canvas.update()
-
-
-
-
 
 
     def bind_events(self):
@@ -222,7 +211,7 @@ class ConnectFourGUI2:
                 return
             
 
-        # AI's turn
+        # rradha e AI
         if not is_terminal_node(self.board):
             col, _ = minimax(self.board, 5, float('-inf'), float('inf'), True)
             print(f"AI moves to column {col}")
@@ -236,6 +225,7 @@ class ConnectFourGUI2:
                 self.game_in_progress = False
                 return
             self.draw_board()
+            #kushti per barazim
             i=0
             for r in range(self.row_count):
                 if self.board[r][self.column_count-1] != 0:
@@ -243,7 +233,6 @@ class ConnectFourGUI2:
             if i == self.row_count:
                 self.open_draw_window()
                    
-
 
     def display_winner(self, winner):
         if winner == "Player":
@@ -268,37 +257,21 @@ class ConnectFourGUI2:
         import loser_box
         loser_box.loserBox("IT'S A TIE!", self.refresh, self.master)
 
-
-    # def refresh(self):
-    #     # Reset the game state
-    #     self.game_in_progress = True
-    #     self.board = create_board(self.row_count, self.column_count)
-    #     self.draw_board()
-    #     self.connect_four_label.config(text='Connect Four', fg='yellow')
-    #     self.start_timer_thread()
     def refresh(self):
       
-
-        # Check if the timer thread is still running
         if self.timer_thread and self.timer_thread.is_alive():
-            # Set the stop event to signal the timer thread to stop
             self.stop_timer_event.set()
-            # Wait for the timer thread to finish
             self.timer_thread.join()
 
-        # Reset the game state
         self.game_in_progress = True
         self.board = create_board(self.row_count, self.column_count)
         self.draw_board()
         self.connect_four_label.config(text='Connect Four', fg='yellow')
 
-        # Reset the timer label
         self.time_var.set("00:00")
 
-        # Clear the stop_timer_event
         self.stop_timer_event.clear()
 
-        # Start a new timer thread only if the game is in progress
         if self.game_in_progress:
             self.start_time = time.time()
             self.timer_thread = threading.Thread(target=self.count_down)
@@ -325,5 +298,5 @@ if __name__ == "__main__":
 
     root = tk.Tk()
     app = ConnectFourGUI2(root, player_name, row_count, column_count)
-    app.update_name_label()  # Update the name label initially
+    app.update_name_label()  
     root.mainloop()
