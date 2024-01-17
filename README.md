@@ -1,4 +1,3 @@
-![Screenshot (701)](https://github.com/VeraLlugiqi/DAA-Connect4/assets/115923848/0cd63ce8-b1eb-4cf7-8eff-c7ac50d8023e)
 # DAA-Connect4
 # Project Overview
 Connect Four Game 
@@ -18,10 +17,9 @@ The game is a traditional Connect Four game played by choosing the table size fr
 	Non-functional Requirements:
 		Response time for move calculation should be reasonable.
 # Algorithm:
-	Minimax Algorithm with Alpha-Beta Pruning:
-	Minimax is a kind of backtracking algorithm that is used in decision making and game theory to find the optimal move for a player, assuming that your opponent also plays optimally.
-	//Describe the Minimax Algorithm and how Alpha-Beta Pruning will be applied.
-	//Discuss the expected advantages and improvements over a basic Minimax implementation.
+ Minimax Algorithm explores the game tree by recursively simulating possible moves up to a specified depth (depth parameter). For each explored move, it assigns a score based on the resulting game state. The scores are then propagated back up the tree, and the algorithm chooses the move with the highest score if it's the maximizing player's turn or the move with the lowest score if it's the minimizing player's turn.
+To improve efficiency, alpha-beta pruning is applied. This technique reduces the number of nodes evaluated by the minimax algorithm by eliminating branches that are guaranteed not to affect the final decision.
+ If at any point during exploration, the algorithm determines that a branch's score won't affect the final decision (i.e., alpha is greater than or equal to beta), it prunes that branch, saving computational resources.
 # Milestones:
 
 
@@ -53,7 +51,6 @@ Photo 6. An example of a winning and losing game.
 
 
 # User Manuals:
-
 To play the game from local host one can clone it directly from this gihub, 
 	Execute the input_gui.py file, 
 	Pick the table size and mode(player vs player or player vs AI)
