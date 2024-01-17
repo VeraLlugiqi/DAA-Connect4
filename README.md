@@ -34,7 +34,8 @@ To play the game from local host one can clone it directly from this guthub,
   	The game will continue untill one of the players wins or runs out of time, 
    	The game can end in a tie or using the buttons the game can be refreshed or exited.
 If playing on web:
-	Upon opening the main page pick the preferences and enjoy the game. 
+	Upon opening the main page pick the preferences and enjoy the game.
+
 
 # Project Closure
 	Outcomes:
