@@ -254,7 +254,7 @@ class ConnectFourGUI2:
     def open_loss_window(self):
         self.stop_timer_event.set()
         import loser_box
-
+        
         loser_box.loserBox("You lost!", self.refresh, self.master)
 
     def refresh(self):
@@ -263,6 +263,11 @@ class ConnectFourGUI2:
         self.board = create_board(self.row_count, self.column_count)
         self.draw_board()
         self.connect_four_label.config(text='Connect Four', fg='yellow')
+        self.start_timer_thread()
+
+
+        
+        
 
     def get_player_name(self):
         return self.player_name
