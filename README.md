@@ -24,22 +24,32 @@ The game is a traditional Connect Four game played by choosing the table size fr
 	//Discuss the expected advantages and improvements over a basic Minimax implementation.
 # Milestones:
 
-	![Screenshot (701)](https://github.com/VeraLlugiqi/DAA-Connect4/assets/115923848/5116ef25-48ec-4499-a2f7-4fa6852199c8)
+
+![Screenshot (701)](https://github.com/VeraLlugiqi/DAA-Connect4/assets/115923848/ccfd594d-cfbe-4f4d-baf5-bcb3116e90f5)
+
+Photo 1. The division of tasks in different epics
 
 ![Screenshot (700)](https://github.com/VeraLlugiqi/DAA-Connect4/assets/115923848/121f2354-3401-4100-85d7-91f1b7404d12)
 
+Photo 2. Branch protection (master and developer)
+
 
 ![Screenshot (702)](https://github.com/VeraLlugiqi/DAA-Connect4/assets/115923848/bd2aea25-be3e-404b-9db6-320f78576592)
+Photo 3. The activity of the students.
+
 
 ![Screenshot (689)](https://github.com/VeraLlugiqi/DAA-Connect4/assets/115923848/172edaf6-6e81-4f9d-9060-2bdade5756a5)
 
+Photo 4. The backlog of a sprint.
+
 
 ![Screenshot (705)](https://github.com/VeraLlugiqi/DAA-Connect4/assets/115923848/175dab01-b9db-4bc3-9f30-0330dfde476f)
+Photo 5. A sprint view in different statuses.
 
 
-![Screenshot (699)](https://github.com/VeraLlugiqi/DAA-Connect4/assets/115923848/d0e1b834-ceb7-4ee7-96bf-3133aa183425)
+![0-02-05-48016d2bfdfade0bdd2683cc992cd351bd642cf9ee0d1c842151588815d9fdc7_9a426e715fd5faa1](https://github.com/VeraLlugiqi/DAA-Connect4/assets/115923848/f7cd1163-93ef-4135-87d6-59f2ec9ec38a)
 
-![Screenshot (704)](https://github.com/VeraLlugiqi/DAA-Connect4/assets/115923848/e7e4a7b7-5cfe-430e-9d25-c211206a93b2)
+Photo 6. An example of a winning and losing game.
 
 
 # User Manuals:
