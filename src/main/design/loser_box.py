@@ -4,6 +4,11 @@ import subprocess
 def close_window(window):
     window.destroy()
 
+def on_closing(window, master):
+    master.destroy()  # Call your additional function
+    window.destroy()
+
+
 def option_selected(option, refresh_function, window_to_destroy, main_game_window):
     print(option)
     if option == "Play Again":
@@ -24,7 +29,7 @@ def create_rounded_button(parent, text, command):
     button.config(width=15, height=2, bd=0, bg='red', fg='black', font=('Helvetica', 12))
     return button
 
-def loserBox(message, refresh_function, main_game_window):
+def loserBox(message, refresh_function, main_game_window, master):
     window = tk.Tk()
     window.title("AlertBox")
     window.geometry("406x264+{0}+{1}".format((window.winfo_screenwidth() - 406) // 2, (window.winfo_screenheight() - 264) // 2))
@@ -44,6 +49,7 @@ def loserBox(message, refresh_function, main_game_window):
     button2.pack(side="right", padx=10)
 
     tk.Label(window, text=message, font=("Helvetica", 20)).place(relx=0.5, rely=0.30, anchor="n")
+    window.protocol("WM_DELETE_WINDOW", lambda: on_closing(window, master))
 
     window.mainloop()
 

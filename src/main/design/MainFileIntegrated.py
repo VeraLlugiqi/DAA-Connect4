@@ -220,7 +220,6 @@ class ConnectFourGUI2:
                 self.display_winner("Tie")
                 self.game_in_progress = False
                 return
-
             
 
         # AI's turn
@@ -237,6 +236,8 @@ class ConnectFourGUI2:
                 self.game_in_progress = False
                 return
             self.draw_board()
+                   
+
 
     def display_winner(self, winner):
         if winner == "Player":
@@ -254,8 +255,8 @@ class ConnectFourGUI2:
     def open_loss_window(self):
         self.stop_timer_event.set()
         import loser_box
-        
-        loser_box.loserBox("You lost!", self.refresh, self.master)
+        loser_box.loserBox("You lost!", self.refresh, self.master, self.master)
+
 
     def refresh(self):
         # Reset the game state
