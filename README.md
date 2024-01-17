@@ -10,12 +10,16 @@ Description: This project was coded in Python using the library Tkinter and impl
 The game is a traditional Connect Four game played by choosing the table size from various sizes offered in a dropbox and choosing between player vs player or player vs AI. 
 
 
-# Requirements
-	Functional Requirements:
-		Accept any valid Connect Four board as input.
-		Output optimal moves to win the game using the Minimax Algorithm.
-	Non-functional Requirements:
-		Response time for move calculation should be reasonable.
+# Requirements  
+Functional Requirements:  
+ 
+Accept any valid Connect Four board as input.  
+  
+Output optimal moves to win the game using the Minimax Algorithm.  
+  
+Non-functional Requirements:  
+ 
+Response time for move calculation should be reasonable.
 # Algorithm:
  Minimax Algorithm explores the game tree by recursively simulating possible moves up to a specified depth (depth parameter). For each explored move, it assigns a score based on the resulting game state. The scores are then propagated back up the tree, and the algorithm chooses the move with the highest score if it's the maximizing player's turn or the move with the lowest score if it's the minimizing player's turn.
 To improve efficiency, alpha-beta pruning is applied. This technique reduces the number of nodes evaluated by the minimax algorithm by eliminating branches that are guaranteed not to affect the final decision.
@@ -61,14 +65,14 @@ If playing on web: <br>
 	Upon opening the main page pick the preferences and enjoy the game.
 
 # Project Closure
-	Outcomes:
-	Despite the moves of the player, AI is able to identify and play the moves to win the game.
+Outcomes:
+Despite the moves of the player, AI is able to identify and play the moves to win the game.
 # Project Team
-	Anjeza Sfishta
-	Leonite Gllareva
-	Medina Shabani
-	Rinesa Zuzaku
-	Tringa Baftiu
-	Valtrina Cacaj
-	Vera Llugiqi
-	Zana Misini
+Anjeza Sfishta <br>
+Leonite Gllareva <br>
+Medina Shabani<br>
+Rinesa Zuzaku<br>
+Tringa Baftiu<br>
+Valtrina Cacaj<br>
+Vera Llugiqi<br>
+Zana Misini<br>
