@@ -53,6 +53,10 @@ Photo 5. The backlog of a sprint.
 ![Screenshot (705)](https://github.com/VeraLlugiqi/DAA-Connect4/assets/115923848/175dab01-b9db-4bc3-9f30-0330dfde476f)
 Photo 6. A sprint view in different statuses.
 
+![Screenshot (707)](https://github.com/VeraLlugiqi/DAA-Connect4/assets/115923848/1cbaa09a-dcd3-43bb-a57c-09c0cf4feab7)
+
+Photo 7. Linked pull requests.
+
 
 
 
