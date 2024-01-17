@@ -24,10 +24,11 @@ Response time for move calculation should be reasonable.
  Minimax Algorithm explores the game tree by recursively simulating possible moves up to a specified depth (depth parameter). For each explored move, it assigns a score based on the resulting game state. The scores are then propagated back up the tree, and the algorithm chooses the move with the highest score if it's the maximizing player's turn or the move with the lowest score if it's the minimizing player's turn.
 To improve efficiency, alpha-beta pruning is applied. This technique reduces the number of nodes evaluated by the minimax algorithm by eliminating branches that are guaranteed not to affect the final decision.
  If at any point during exploration, the algorithm determines that a branch's score won't affect the final decision (i.e., alpha is greater than or equal to beta), it prunes that branch, saving computational resources. 
- 
-![0-02-05-48016d2bfdfade0bdd2683cc992cd351bd642cf9ee0d1c842151588815d9fdc7_9a426e715fd5faa1](https://github.com/VeraLlugiqi/DAA-Connect4/assets/115923848/f7cd1163-93ef-4135-87d6-59f2ec9ec38a)
+ ![Player1Won](https://github.com/VeraLlugiqi/DAA-Connect4/assets/118756985/f2b79623-3d2a-44fb-996e-90735e3f4cd0)
 
-Photo 6. An example of a winning and losing game.
+
+
+Photo 6. An example of AI winning.
 # Milestones:
 
 
