@@ -1,5 +1,7 @@
 # MainFileIntegrated.py
 import tkinter as tk
+import threading
+import time
 import sys
 from backend_logic import create_board, drop_piece, is_valid_location, get_next_open_row, winning_move, minimax, AI_PIECE, PLAYER_PIECE
 from backend_logic import is_terminal_node
@@ -17,6 +19,7 @@ class ConnectFourGUI2:
         self.player_name = player_name if player_name else "Player 1"  # Ensure a default name if not provided
         self.row_count = row_count
         self.column_count = column_count
+        self.start_time = None
 
         self.master = master
         self.master.title("Connect Four")
@@ -33,6 +36,10 @@ class ConnectFourGUI2:
         self.name_label = tk.Label(button_frame, text=f'Name: {self.player_name}', font=('Helvetica', 14), bg='yellow', fg='black')
         self.name_label.pack(side='left', padx=20)
 
+        self.time_var = tk.StringVar(value='04:00')
+        self.timer_label = tk.Label(button_frame, textvariable=self.time_var, font=('Helvetica', 14), bg='lightgray',width=10)
+        self.timer_label.pack(side='left', padx=(160, 30), anchor='center')
+
         tk.Label(button_frame, text='', bg='white').pack(side='left', padx=50)
 
         self.refresh_button = tk.Button(button_frame, text='🔄', command=self.refresh, font=('Helvetica', 12), width=5, bg='yellow', fg='black')
@@ -48,6 +55,55 @@ class ConnectFourGUI2:
         self.draw_board()
         self.bind_events()
 
+        self.game_in_progress = True
+        self.stop_timer_event = threading.Event()
+        self.start_timer_thread()
+        self.end_time = None
+
+    
+    def  start_timer_thread(self):
+        self.start_time = time.time()
+        timer_thread = threading.Thread(target=self.count_down)
+        timer_thread.start()
+
+    def count_down(self):
+        total_in_seconds = 4 * 60
+
+        while total_in_seconds >= 0:
+            if self.stop_timer_event.is_set():
+                break
+
+            minutes, seconds = divmod(total_in_seconds, 60)
+            time_str = f'{minutes:02d}:{seconds:02d}'
+            self.time_var.set(time_str)
+            self.master.update()
+            time.sleep(1)
+            total_in_seconds -= 1
+            
+            if not self.game_in_progress:
+               break
+        if not self.stop_timer_event.is_set():
+           self.end_time = time.strftime("%H:%M:%S")
+           self.time_var.set("00:00")
+           self.master.after(1000, self.complete_count_down)
+    def complete_count_down(self):
+    # Check if the player won or lost
+      if not self.stop_timer_event.is_set():
+        self.open_result_window()
+        self.game_in_progress = False
+        self.end_time = None 
+    def open_result_window(self):
+        # Set the stop event to signal the timer thread to stop
+        self.stop_timer_event.set()            
+    def update_timer_label(self):
+        if self.start_time:
+            elapsed_time = time.time() - self.start_time
+            minutes, seconds = divmod(int(elapsed_time), 60)
+            time_str = f'{minutes:02d}:{seconds:02d}'
+            self.timer_label.config(text=time_str)
+
+            # Schedule the next update after 1000 milliseconds (1 second)
+            self.master.after(1000, self.update_timer_label)           
     def draw_board(self):
         self.canvas.delete("all")
 
@@ -100,15 +156,19 @@ class ConnectFourGUI2:
             row = get_next_open_row(self.board, col)
             drop_piece(self.board, row, col, PLAYER_PIECE)
 
+            self.draw_board()
+
             if winning_move(self.board, PLAYER_PIECE):
                 self.display_winner("Player")
+                self.game_in_progress = False
                 return
 
             if is_terminal_node(self.board):
                 self.display_winner("Tie")
+                self.game_in_progress = False
                 return
 
-            self.draw_board()
+            
 
         # AI's turn
         if not is_terminal_node(self.board):
@@ -121,6 +181,7 @@ class ConnectFourGUI2:
             if winning_move(self.board, AI_PIECE):
                 print("AI wins!!")
                 self.display_winner("AI")
+                self.game_in_progress = False
                 return
             self.draw_board()
 
@@ -133,13 +194,19 @@ class ConnectFourGUI2:
             self.connect_four_label.config(text=f'Connect Four - {winner} Tied!', fg='red')
 
     def open_win_window(self):
+        self.stop_timer_event.set()
         import winner_box
+        winner_box.winnerBox("You won!", self.refresh, self.master)
 
     def open_loss_window(self):
+        self.stop_timer_event.set()
         import loser_box
+
+        loser_box.loserBox("You lost!", self.refresh, self.master)
 
     def refresh(self):
         # Reset the game state
+        self.game_in_progress = True
         self.board = create_board(self.row_count, self.column_count)
         self.draw_board()
         self.connect_four_label.config(text='Connect Four', fg='yellow')
