@@ -16,7 +16,7 @@ def option_selected(option, refresh_function, window_to_destroy, main_game_windo
 
 def open_input_gui(main_game_window):
     subprocess.run(["python", "input_gui.py"])
-    main_game_window.destroy()
+    # main_game_window.destroy()
 
 def create_rounded_button(parent, text, command):
     button = tk.Button(parent, text=text, command=command)

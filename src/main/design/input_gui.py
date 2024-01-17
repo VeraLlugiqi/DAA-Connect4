@@ -166,6 +166,7 @@ class ConnectFourSetup:
 
         # Close the popup window
         popup_window.destroy()
+        self.window.destroy()
 
         root = tk.Tk()
         game_instance = ConnectFourGUI2(root, player_name, row_count, column_count)
