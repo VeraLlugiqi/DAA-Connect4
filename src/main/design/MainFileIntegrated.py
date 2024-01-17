@@ -22,7 +22,7 @@ class ConnectFourGUI2:
         self.row_count = row_count
         self.column_count = column_count
         self.start_time = None
-
+        self.timer_thread = None
         self.master = master
         self.master.title("Connect Four")
         adjusted_width = 900  # Adjust this value based on your preference
@@ -83,8 +83,8 @@ class ConnectFourGUI2:
     
     def  start_timer_thread(self):
         self.start_time = time.time()
-        timer_thread = threading.Thread(target=self.count_down)
-        timer_thread.start()
+        self.timer_thread = threading.Thread(target=self.count_down)
+        self.timer_thread.start()
 
     def count_down(self):
         total_in_seconds = 4 * 60
@@ -261,25 +261,48 @@ class ConnectFourGUI2:
     def open_loss_window(self):
         self.stop_timer_event.set()
         import loser_box
-        loser_box.loserBox("You lost!", self.refresh, self.master, self.master)
+        loser_box.loserBox("You lost!", self.refresh, self.master)
 
     def open_draw_window(self):
         self.stop_timer_event.set()
         import loser_box
-        loser_box.loserBox("IT'S A TIE!", self.refresh, self.master, self.master)
+        loser_box.loserBox("IT'S A TIE!", self.refresh, self.master)
 
 
+    # def refresh(self):
+    #     # Reset the game state
+    #     self.game_in_progress = True
+    #     self.board = create_board(self.row_count, self.column_count)
+    #     self.draw_board()
+    #     self.connect_four_label.config(text='Connect Four', fg='yellow')
+    #     self.start_timer_thread()
     def refresh(self):
+      
+
+        # Check if the timer thread is still running
+        if self.timer_thread and self.timer_thread.is_alive():
+            # Set the stop event to signal the timer thread to stop
+            self.stop_timer_event.set()
+            # Wait for the timer thread to finish
+            self.timer_thread.join()
+
         # Reset the game state
         self.game_in_progress = True
         self.board = create_board(self.row_count, self.column_count)
         self.draw_board()
         self.connect_four_label.config(text='Connect Four', fg='yellow')
-        self.start_timer_thread()
 
+        # Reset the timer label
+        self.time_var.set("00:00")
 
-        
-        
+        # Clear the stop_timer_event
+        self.stop_timer_event.clear()
+
+        # Start a new timer thread only if the game is in progress
+        if self.game_in_progress:
+            self.start_time = time.time()
+            self.timer_thread = threading.Thread(target=self.count_down)
+            self.timer_thread.start()
 
     def get_player_name(self):
         return self.player_name
