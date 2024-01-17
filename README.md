@@ -29,13 +29,14 @@ The game is a traditional Connect Four game played by choosing the table size fr
 	Testing and debugging phase - [Date]
 	Final project delivery - [Date]
 # User Manuals:
-To play the game from local host one can clone it directly from this guthub, 
- 	Execute the input_gui.py file, pick the table size and mode(player vs player or player vs ai)
-  	The game will continue untill one of the players wins or runs out of time, 
-   	The game can end in a tie or using the buttons the game can be refreshed or exited.
+
+To play the game from local host one can clone it directly from this gihub, 
+	Execute the input_gui.py file, 
+	Pick the table size and mode(player vs player or player vs AI)
+	The game will continue until one of the players wins or runs out of time, 
+	The game can end in a tie or using the buttons the game can be refreshed or exited.
 If playing on web:
 	Upon opening the main page pick the preferences and enjoy the game.
-
 
 # Project Closure
 	Outcomes:
