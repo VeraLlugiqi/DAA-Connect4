@@ -1,40 +1,37 @@
 
 # DAA-Connect4
-Kerkesat
 
-Project Overview
+- Project Overview
 	Project Name
 	Project Purpose
 	Key goals
 
-Requirements
+- Requirements
 	Functional Requirements:
 		Accept any valid Connect Four board as input.
 		Output optimal moves to win the game using the Minimax Algorithm.
 	Non-functional Requirements:
 		Response time for move calculation should be reasonable.
-Algorithm:
+- Algorithm:
 	Minimax Algorithm with Alpha-Beta Pruning:
 	Minimax is a kind of backtracking algorithm that is used in decision making and game theory to find the optimal move for a player, assuming that your opponent also plays optimally.
 	//Describe the Minimax Algorithm and how Alpha-Beta Pruning will be applied.
 	//Discuss the expected advantages and improvements over a basic Minimax implementation.
-Milestones:
+- Milestones:
 	Connect Four game logic implemented - [Date]
 	User interface for input developed - [Date]
 	Minimax Algorithm with Alpha-Beta Pruning integrated - [Date]
 	Testing and debugging phase - [Date]
 	Final project delivery - [Date]
-User Manuals:
+- User Manuals:
 	Provide a user manual for playing Connect Four and understanding the input requirements.
+- Deployment Instructions
 
-9. Deployment Instructions
-
-13. Project Closure
-
-Outcomes:
+- Project Closure
+	Outcomes:
 	Summarize the outcomes of the project.
 
-Project Team
+- Project Team
 	Team Members
 	Anjeza Sfishta
 	Leonite Gllareva
