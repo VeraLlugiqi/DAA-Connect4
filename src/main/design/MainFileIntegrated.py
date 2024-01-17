@@ -236,6 +236,12 @@ class ConnectFourGUI2:
                 self.game_in_progress = False
                 return
             self.draw_board()
+            i=0
+            for r in range(self.row_count):
+                if self.board[r][self.column_count-1] != 0:
+                    i+=1
+            if i == self.row_count:
+                self.open_draw_window()
                    
 
 
@@ -256,6 +262,11 @@ class ConnectFourGUI2:
         self.stop_timer_event.set()
         import loser_box
         loser_box.loserBox("You lost!", self.refresh, self.master, self.master)
+
+    def open_draw_window(self):
+        self.stop_timer_event.set()
+        import loser_box
+        loser_box.loserBox("IT'S A TIE!", self.refresh, self.master, self.master)
 
 
     def refresh(self):
