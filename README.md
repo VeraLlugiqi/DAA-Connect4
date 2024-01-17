@@ -1,4 +1,4 @@
-
+![Screenshot (701)](https://github.com/VeraLlugiqi/DAA-Connect4/assets/115923848/0cd63ce8-b1eb-4cf7-8eff-c7ac50d8023e)
 # DAA-Connect4
 # Project Overview
 Connect Four Game 
@@ -23,11 +23,25 @@ The game is a traditional Connect Four game played by choosing the table size fr
 	//Describe the Minimax Algorithm and how Alpha-Beta Pruning will be applied.
 	//Discuss the expected advantages and improvements over a basic Minimax implementation.
 # Milestones:
-	Connect Four game logic implemented - [Date]
-	User interface for input developed - [Date]
-	Minimax Algorithm with Alpha-Beta Pruning integrated - [Date]
-	Testing and debugging phase - [Date]
-	Final project delivery - [Date]
+
+	![Screenshot (701)](https://github.com/VeraLlugiqi/DAA-Connect4/assets/115923848/5116ef25-48ec-4499-a2f7-4fa6852199c8)
+
+![Screenshot (700)](https://github.com/VeraLlugiqi/DAA-Connect4/assets/115923848/121f2354-3401-4100-85d7-91f1b7404d12)
+
+
+![Screenshot (702)](https://github.com/VeraLlugiqi/DAA-Connect4/assets/115923848/bd2aea25-be3e-404b-9db6-320f78576592)
+
+![Screenshot (689)](https://github.com/VeraLlugiqi/DAA-Connect4/assets/115923848/172edaf6-6e81-4f9d-9060-2bdade5756a5)
+
+
+![Screenshot (705)](https://github.com/VeraLlugiqi/DAA-Connect4/assets/115923848/175dab01-b9db-4bc3-9f30-0330dfde476f)
+
+
+![Screenshot (699)](https://github.com/VeraLlugiqi/DAA-Connect4/assets/115923848/d0e1b834-ceb7-4ee7-96bf-3133aa183425)
+
+![Screenshot (704)](https://github.com/VeraLlugiqi/DAA-Connect4/assets/115923848/e7e4a7b7-5cfe-430e-9d25-c211206a93b2)
+
+
 # User Manuals:
 
 To play the game from local host one can clone it directly from this gihub, 
