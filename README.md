@@ -51,12 +51,12 @@ Photo 6. An example of a winning and losing game.
 
 
 # User Manuals:
-To play the game from local host one can clone it directly from this gihub, 
-	Execute the input_gui.py file, 
-	Pick the table size and mode(player vs player or player vs AI)
-	The game will continue until one of the players wins or runs out of time, 
-	The game can end in a tie or using the buttons the game can be refreshed or exited.
-If playing on web:
+To play the game from local host one can clone it directly from this gihub, <br> 
+	Execute the input_gui.py file, <br> 
+	Pick the table size and mode(player vs player or player vs AI) <br> 
+	The game will continue until one of the players wins or runs out of time, <br> 
+	The game can end in a tie or using the buttons the game can be refreshed or exited. <br>
+If playing on web: <br>
 	Upon opening the main page pick the preferences and enjoy the game.
 
 # Project Closure
