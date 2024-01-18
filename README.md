@@ -66,9 +66,13 @@ To play the game from local host one can clone it directly from this gihub, <br>
 	Execute the input_gui.py file, <br> 
 	Pick the table size and mode(player vs player or player vs AI) <br> 
 	The game will continue until one of the players wins or runs out of time, <br> 
-	The game can end in a tie or using the buttons the game can be refreshed or exited. <br>
-If playing on web: <br>
-	Upon opening the main page pick the preferences and enjoy the game.
+	The game can end in a tie or using the buttons the game can be refreshed or exited. 
+ 
+The project is also a desktop application implementation of the classic Connect4 game. It is deployed at 		https://verallugiqi.github.io/DAA-Connect4/. <br> 
+	Steps:  
+		Download the desktop app in this link: https://verallugiqi.github.io/DAA-Connect4/.  <br> 
+		Extract the downloaded ZIP file. <br> 
+		Run the executable file 
 
 # Project Closure
 Outcomes:
