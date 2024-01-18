@@ -7,47 +7,62 @@
     <title>Download Page</title>
     <style>
         body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-}
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+        }
 
-.download-container {
-    text-align: center;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+        .background {
+            flex: 1;
+            background-image: url('image.png'); /* Set the path to your image */
+            background-size: cover; /* Adjust as needed */
+            background-repeat: no-repeat;
+        }
 
-.download-button {
-    display: inline-block;
-    padding: 10px 20px;
-    margin-top: 20px;
-    background-color: #3498db;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
+        .content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+        }
 
-.download-button:hover {
-    background-color: #2980b9;
-}
+        .download-container {
+            text-align: left;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
 
+        .download-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #3498db;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .download-button:hover {
+            background-color: #2980b9;
+        }
     </style>
 </head>
 
 <body>
-    <div class="download-container">
-        <h1>Download Your File</h1>
-        <p>Click the button below to start the download.</p>
-        <a href="input_gui.zip" download class="download-button">Download Now</a>
+    <div class="background"></div>
+    <div class="content">
+        <div class="download-container">
+            <h1>Download Your File</h1>
+            <p>Click the button below to start the download.</p>
+            <a href="input_gui.zip" download class="download-button">Download Now</a>
+        </div>
     </div>
 </body>
 </html>
