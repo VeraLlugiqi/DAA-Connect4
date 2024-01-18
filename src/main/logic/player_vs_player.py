@@ -253,25 +253,30 @@ class ConnectFourGUI(tk.Frame):
     def check_win(self, row, col):
         player = self.board[row][col]
 
-        # Check horizontally
-        if col <= self.column_count - 4:
-            if np.all(self.board[row, col:col + 4] == player):
-                return True
+        if col <= self.column_count - 4 and np.all(self.board[row, col:col + 4] == player):
+            return True
 
-        # Check vertically
-        if row <= self.row_count - 4:
-            if np.all(self.board[row:row + 4, col] == player):
-                return True
+        if row <= self.row_count - 4 and np.all(self.board[row:row + 4, col] == player):
+            return True
 
-        # Check diagonally (positive slope)
-        if row <= self.row_count - 4 and col <= self.column_count - 4:
-            if np.all([self.board[row + i, col + i] == player for i in range(4)]):
-                return True
+       
+        if row <= self.row_count - 4 and col <= self.column_count - 4 and np.all([self.board[row + i, col + i] == player for i in range(4)]):
+            return True
 
-        # Check diagonally (negative slope)
-        if row >= 3 and col <= self.column_count - 4:
-            if np.all([self.board[row - i, col + i] == player for i in range(4)]):
-                return True
+        if row >= 3 and col <= self.column_count - 4 and np.all([self.board[row - i, col + i] == player for i in range(4)]):
+            return True
+
+        if row >= 3 and col >= 3 and np.all([self.board[row - i, col - i] == player for i in range(4)]):
+            return True
+
+        if col >= 3 and np.all(self.board[row, col-3:col+1][::-1] == player):
+            return True
+
+        if row <= self.row_count - 4 and col >= 3 and np.all([self.board[row + i, col - i] == player for i in range(4)]):
+            return True
+
+        if row <= self.row_count - 4 and np.all(self.board[row:row + 4, col][::-1] == player):
+            return True
 
         return False
 
